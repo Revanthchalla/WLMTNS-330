@@ -1,0 +1,128 @@
+{ "data":
+  { "title": "Billing"
+  , "columns": 1
+  , "flows":
+    [
+      { "_id": "walmart_auto_billing_invoice_flow"
+      , "showMapping": true
+      , "showSchedule": true
+      }
+    , { "_id": "walmart_auto_billing_cashsale_flow"
+      , "showMapping": true
+      , "showSchedule": true
+      }
+    ]
+  , "fields" :
+      [
+        { "label": "NetSuite saved search for auto-billing orders"
+         , "required": true
+         , "value": "customsearch_celigo_walmart_auto_billing"
+         , "type": "select"
+         , "name": "auto_billing_export_savedSearch_searchId"
+         , "supportsRefresh": true
+         , "options":
+           [
+             [
+               "customsearch_celigo_walmart_auto_billing"
+             , "Celigo Walmart Auto Billing Export Search"
+             ]
+           ]
+         },
+         {
+           "label": "Auto-bill orders in NetSuite when the status is",
+           "required": true,
+           "value": "SalesOrd:B",
+           "type": "select",
+           "name": "auto_billing_export_sales_order_status",
+           "tooltip": "Provide the order status in NetSuite after which the Integration App should automatically bill the sales orders and create corresponding cash sales or invoices.",
+           "options": [
+             [
+               "SalesOrd:B",
+               "Pending Fulfillment"
+             ],
+             [
+               "SalesOrd:F",
+               "Pending Billing"
+             ]
+           ]
+         }
+      ]
+  }
+  , "jsonpath":
+    [
+      { "record": "flow-auto-billing-invoice"
+      , "readfrom": "_id"
+      , "writeto": "_id"
+      , "writetopath": "$.flows[?(@._id==\"walmart_auto_billing_invoice_flow\")]"
+      }
+    , { "record": "flow-auto-billing-cashsale"
+      , "readfrom": "_id"
+      , "writeto": "_id"
+      , "writetopath": "$.flows[?(@._id==\"walmart_auto_billing_cashsale_flow\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-autoBillingExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": 0
+      , "removeAll": true
+      , "writetopath": "$.fields[?(@.name==\"auto_billing_export_savedSearch_searchId\")].options"
+      }
+    , { "record": "nsConnectorUtil-copy-autoBillingExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": "value"
+      , "writetopath": "$.fields[?(@.name==\"auto_billing_export_savedSearch_searchId\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-autoBillingExport-savedsearch"
+      , "readfrom":
+          [
+            {
+              "readfrom": "Celigo Walmart Auto Billing Export Search ["
+            },
+            {
+              "record": "state",
+              "readfrom": "accountname"
+            },
+            {
+              "readfrom": "]"
+            }
+          ]
+      , "writeto": 0
+      , "writetopath": "$.fields[?(@.name==\"auto_billing_export_savedSearch_searchId\")].options"
+      }
+    , { "readfrom":
+        [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-auto-billing-invoice"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_savedSearchAllExports_listSavedSearches_"
+          }
+        , { "record": "export-auto-billing-cashsale"
+          , "readfrom": "_id"
+          }
+        ]
+      , "writeto": "name"
+      , "writetopath": "$.fields[?(@.name==\"auto_billing_export_savedSearch_searchId\")]"
+      }
+    , {
+        "readfrom": [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-auto-billing-invoice"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_updateSearchSalesOrderStatusFilters_"
+          }
+        , { "record": "export-auto-billing-cashsale"
+          , "readfrom": "_id"
+          }
+      ],
+      "writeto": "name"
+    , "writetopath": "$.fields[?(@.name==\"auto_billing_export_sales_order_status\")]"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+    "pageIndex": 1,
+    "state": {},
+    "connection": {
+        "encrypted": {
+            "privateKey": "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALgEY/D+hV1qeTjfTVyyT0IGvCSmOOEIpsaTnWFXivKvmlHn3KEnikaC1WXAofS+Sb4mjp70OYwgCjjDldZRBo57fiNZ/6o3q87lSfouplryBXSZsyn0xPUA6tC6cq/nogwD2WX5qP2qM8K1m5xEbi9uWd0Uf3CKhyfwLs/rAuBzAgMBAAECgYEAkNsz6VQSnBTi1DhEaAIdjjZLCPaos8zhrFQrgaMuSBif/HXvIhVELnlzjyPy2fyphDxJ7SsH2hymr0SXwRwLceqgInpE/ktAQRcqkY0SpKajtlknHz+08dqp+hVZY/4UmzTf80mTh+IkbEnwtpTAQi5L1NV5YY4sti/PZzhrQPECQQDwMIcFPDgynSpQRXE/n/g1t3Ozzb2qE9K1dB0Z7+SonBIrq1ZTZ/Nr9Dk4ZLgjYYZjIZI+052lC4v3MeFAQoCtAkEAxCFK8GaM2B3lH5V8t/GLuhb6S0REv7Me+2JurPLksepKWAfAi1rYnOLC+C7HwgTlEuQyflhk6A1MN665DmZpnwJAf4lU+HusX3vCjxMAekdH9cXugufZMOkLtlvsY+xUnw8YOuXkla8ZuxXYGFCq0eakBBk8XW3iRFPoQx7SO1vUlQJBAIPeXqSETu6AKy2xNMn4fhoAmQlCPXcm2A3tgLyIE3wMKzBFBhCsZDgXvz9fNLAe2mZ5R/nrNO1RA43szEACW8ECQEsVL7goId95jRpoQ4AJ6nCKI9RGYbVBioUhBJIM3F2rOPNdOTRBFX4Y9YihmyPbzp7ReHqBYMICRNzchl+YFzc="
+        },
+        "unencrypted": {
+            "walmartConsumerId": "7611ebce-74c1-4ac9-8d3f-ab915b6db785"
+        }
+    },
+    "configuration": {
+        "method": "GET",
+        "relativePath": "/v2/orders",
+        "supportPaging": true,
+        "resourceType": "export",
+        "pageSizeLimit" : 2,
+        "applicationAdaptor": "walmart",
+        "handler": "walmartOrderImportHandler",
+        "headers": {
+            "Accept": "application/xml"
+        },
+        "acceptableErrorCodes": [
+            404
+        ],
+        "responseParser": {
+            "type": "xmltojson",
+            "parserConfig": {
+                "arrayPaths": [
+                    "$[\"list\"][\"elements\"][\"order\"]",
+                    "$[\"list\"][\"elements\"][\"order\"][*][\"orderLines\"][\"orderLine\"]",
+                    "$[\"list\"][\"elements\"][\"order\"][*][\"orderLines\"][\"orderLine\"][*][\"charges\"][\"charge\"]"
+                ]
+            }
+        }
+    },
+    "_exportId": "57a34bc92e44e138246d392b",
+    "type": "test",
+    "test": {
+        "limit": 1
+    },
+    "bearerToken": "ottac4ae467067541ac9589288f20805786"
+}

@@ -1,0 +1,49 @@
+{
+    "data":
+    {
+        "apiIdentifierData":
+        {
+            "type": "records",
+            "recordConfig":
+            {
+                "operation": "createUpdate",
+                "recordType": "customrecord_celigo_wlmrt_account_info",
+                "filters": [
+                    ["custrecord_celigo_wlmrt_account_id", "is"]
+                ],
+                "target":
+                {
+                    "nlobjRecordType": "customrecord_celigo_wlmrt_account_info",
+                    "nlobjFieldIds":
+                    {}
+                }
+            }
+        }
+    },
+    "apiIdentifier": true,
+    "method": "POST",
+    "jsonpath": [
+    {
+        "record": "state",
+        "readfrom": "accountname",
+        "writetopath": "$.apiIdentifierData.recordConfig.target.nlobjFieldIds",
+        "writeto": "name"
+    },
+    {
+        "record": "state",
+        "readfrom": "accountid",
+        "writetopath": "$.apiIdentifierData.recordConfig.target.nlobjFieldIds",
+        "writeto": "custrecord_celigo_wlmrt_account_id"
+    },
+    {
+        "record": "state",
+        "readfrom": "accountid",
+        "writeto": 0,
+        "writetopath": "$.apiIdentifierData.recordConfig.filters"
+    },
+    {
+        "record": "walmartintegration-load",
+        "readfrom": "$.settings.commonresources.nsUtilImportAdaptorApiIdentifier",
+        "writeto": "apiIdentifier"
+    }]
+}

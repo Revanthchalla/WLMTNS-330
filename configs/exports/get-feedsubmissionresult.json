@@ -1,0 +1,30 @@
+{ "data" :
+  {   "name": "Walmart Get FeedSubmissionResult Export Adaptor",
+      "externalId": "walmart_get_feedSubmissionResult_export_adaptor",  
+      "asynchronous": true,
+      "pageSize": 20,
+      "http": {
+      	"relativeURI": "/feeds/{{data.feedId}}?includeDetails=true&offset={{export.http.paging.skip}}&limit=500",
+      	"response": {
+          "resourcePath": "/PartnerFeedResponse/itemDetails/itemIngestionStatus",
+          "successPath": "/PartnerFeedResponse/feedStatus/text()",
+          "successValues": "PROCESSED",
+          "errorPath": "/PartnerFeedResponse/ingestionErrors"
+        },
+        "method": "GET",
+        "paging": {
+          "method": "skip",
+          "skip": 0,
+          "maxCountPath": "/PartnerFeedResponse/itemsReceived/text()"
+        }
+      }
+  }
+, "resourcetype": "exports"
+, "jsonpath":
+  [
+    { "record": "connection-walmart-http"
+    , "readfrom": "_id"
+    , "writeto": "_connectionId"
+    }
+  ]
+}

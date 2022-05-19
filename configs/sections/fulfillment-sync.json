@@ -1,0 +1,126 @@
+{ "data":
+  { "title": "Fulfillment"
+  , "columns": 1
+  , "flows":
+    [
+      { "_id": "walmart_fulfillment_flow"
+      , "showMapping": true
+      , "showSchedule": true
+      }
+    ]
+  , "fields":
+    [
+     { "label": "Select the NetSuite saved search for syncing item fulfillments"
+      , "required": true
+      , "value": "customsearch_celigo_wlmrt_fulfillment_ex"
+      , "type": "select"
+      , "name": "fulfillment_export_savedSearch_searchId"
+      , "supportsRefresh": true
+      , "options":
+        [
+          [
+            "customsearch_celigo_wlmrt_fulfillment_ex"
+          , "Celigo Walmart Fulfillment Export Search"
+          ]
+        ]
+      }
+    , {
+        "generates": [null],
+        "extracts": [null],
+        "default": "",
+        "allowFailures": false,
+        "supportsGeneratesRefresh": true,
+        "supportsExtractsRefresh": true,
+        "generateFieldHeader": "Walmart Ship Method",
+        "extractFieldHeader": "NetSuite Ship Method",
+        "label": "Ship Method Mapping",
+        "map": {},
+        "tooltip": "Lets you map the shipping methods between Walmart and NetSuite. You can also provide a default value in case no match is found.",
+        "title": "Map Ship Methods",
+        "name": "staticMapWidget_shipmethodLookup_fulfillment",
+        "type": "staticMapWidget"
+      }
+    , { "label": "Automate shipment carrier mapping"
+      , "tooltip": "When enabled, the shipping methods in NetSuite are automatically mapped to shipping carriers in Walmart.  Else the mapping has to be done manually using field mappings page."
+      , "type": "checkbox"
+      , "name": "auto_carrier_lookup_enabled"
+      , "value": true
+      }
+    ]
+  }
+  , "jsonpath":
+    [
+      { "record": "flow-fulfillment"
+      , "readfrom": "_id"
+      , "writeto": "_id"
+      , "writetopath": "$.flows[?(@._id==\"walmart_fulfillment_flow\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-fulfillmentExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": 0
+      , "removeAll": true
+      , "writetopath": "$.fields[?(@.name==\"fulfillment_export_savedSearch_searchId\")].options"
+      }
+    , { "record": "nsConnectorUtil-copy-fulfillmentExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": "value"
+      , "writetopath": "$.fields[?(@.name==\"fulfillment_export_savedSearch_searchId\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-fulfillmentExport-savedsearch"
+      , "readfrom":
+          [
+            {
+              "readfrom": "Celigo Walmart Fulfillment Export Search ["
+            },
+            {
+              "record": "state",
+              "readfrom": "accountname"
+            },
+            {
+              "readfrom": "]"
+            }
+          ]
+      , "writeto": 0
+      , "writetopath": "$.fields[?(@.name==\"fulfillment_export_savedSearch_searchId\")].options"
+      }
+    , { "readfrom":
+          [
+            {
+              "readfrom": "exports_"
+            }
+          , { "record": "export-fulfillment"
+            , "readfrom": "_id"
+            }
+          , {
+              "readfrom": "_savedSearch_listSavedSearches"
+            }
+          ]
+        , "writeto": "name"
+        , "writetopath": "$.fields[?(@.name==\"fulfillment_export_savedSearch_searchId\")]"
+      }
+    , {
+        "readfrom": [{
+          "readfrom": "imports_"
+        }, {
+          "record": "import-fulfillment"
+          , "readfrom": "_id"
+        }, {
+          "readfrom": "_shipmethodLookupForFulfillment_listShipMethodsWithoutIds_listWalmartShipMethods"
+        }]
+        , "writeto": "name"
+        , "writetopath": "$.fields[?(@.name==\"staticMapWidget_shipmethodLookup_fulfillment\")]"
+      }
+    , {
+        "readfrom": [{
+          "readfrom": "imports_"
+        }, {
+          "record": "import-fulfillment"
+          , "readfrom": "_id"
+        }, {
+          "readfrom": "_autoCarrierLookupEnabled"
+        }]
+        , "writeto": "name"
+        , "writetopath": "$.fields[?(@.name==\"auto_carrier_lookup_enabled\")]"
+      }
+  ]
+}

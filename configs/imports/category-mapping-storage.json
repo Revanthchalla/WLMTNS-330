@@ -1,0 +1,115 @@
+{
+    "data": {
+        "name": "Walmart Item Category Mappings Storage Import Adaptor",
+        "externalId": "walmart_item_category_mappings_storage_import_adaptor",
+        "mapping": {
+            "lists": [
+                {
+                    "generate": "commonAttributes",
+                    "fields": [
+                        {
+                            "extract": "SKU",
+                            "generate": "sku"
+                        },
+                        {
+                            "extract": "Category Id",
+                            "generate": "Category Id"
+                        },
+                        {
+                            "extract": "Root Category Id",
+                            "generate": "Root Category Id"
+                        },
+                        {
+                            "extract": "Category Name",
+                            "generate": "Category Name"
+                        },
+                        {
+                            "extract": "Process Mode",
+                            "generate": "processMode"
+                        },
+                        {
+                            "extract": "displayname",
+                            "generate": "productName"
+                        },
+                        {
+                            "extract": "salesdescription",
+                            "generate": "shortDescription"
+                        },
+                        {
+                            "extract": "manufacturer",
+                            "generate": "brand"
+                        },
+                        {
+                            "extract": "id",
+                            "generate": "id"
+                        },
+                        {
+                            "extract": "Account ID",
+                            "generate": "Account ID"
+                        },
+                        {
+                            "extract": "Account Name",
+                            "generate": "Account Name"
+                        },
+                        {
+                            "extract": "Replace Offer",
+                            "generate": "Replace Offer"
+                        }
+                    ]
+                },
+                {
+                    "generate": "commonAttributes.Dimensions",
+                    "fields": [
+                        {
+                            "extract": "weight",
+                            "generate": "ShippingWeight.measure"
+                        },
+                        {
+                            "extract": "weightunit",
+                            "generate": "ShippingWeight.unit"
+                        }
+                    ]
+                },
+                {
+                    "generate": "commonAttributes.Compliance",
+                    "fields": []
+                },
+                {
+                    "generate": "commonAttributes.Images",
+                    "fields": []
+                },
+                {
+                    "generate": "commonAttributes.Offer",
+                    "fields": []
+                },
+                {
+                    "generate": "commonAttributes.Variation",
+                    "fields": []
+                }
+            ],
+            "fields": []
+        },
+        "wrapper": {
+            "function": "import",
+            "configuration": {
+                "relativeURI": [
+                    "/"
+                ],
+                "method": [
+                    "POST"
+                ],
+                "body": [],
+                "lookups": []
+            }
+        },
+        "distributed": false
+    },
+    "resourcetype": "imports",
+    "jsonpath": [
+        {
+            "record": "walmartintegration-load",
+            "readfrom": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})].walmartConnectionId",
+            "writeto": "_connectionId"
+        }
+    ]
+}

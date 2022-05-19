@@ -1,0 +1,212 @@
+{ "data":
+  { "title": "Inventory"
+  , "columns": 1
+  , "flows":
+    [
+      { "_id": "walmart_inventory_flow"
+      , "showMapping": true
+      , "showSchedule": true
+      }
+    , { "_id": "walmart_kit_inventory_flow"
+      , "showMapping": true
+      , "showSchedule": true
+      }
+    ]
+  , "fields":
+    [
+      { "label": "Select the NetSuite saved search for syncing inventory levels"
+      , "required": true
+      , "value": "customsearch_celigo_wlmrt_inventory_exp"
+      , "type": "select"
+      , "name": "inventory_export_savedSearch_searchId"
+      , "supportsRefresh": true
+      , "options":
+        [
+          [
+            "customsearch_celigo_wlmrt_inventory_exp"
+          , "Celigo Walmart Inventory Export Search"
+          ]
+        ]
+      }
+    , { "label": "Select the NetSuite saved search for syncing inventory levels for Kit Items"
+      , "required": true
+      , "value": "customsearch_celigo_wlmrt_kitinvent_exp"
+      , "type": "select"
+      , "name": "inventory_export_kit_items_savedSearch_searchId"
+      , "supportsRefresh": true
+      , "options":
+        [
+          [
+            "customsearch_celigo_wlmrt_kitinvent_exp"
+          , "Celigo Walmart Kit Inventory Export Search"
+          ]
+        ]
+      }
+    , { "value": false
+      , "name": "inventory_export_toggleNetsuiteExportType"
+      , "type": "checkbox"
+      , "tooltip": "Syncs inventory for all the NetSuite items linked to Walmart, every time inventory export data flow runs."
+      , "label": "Always sync inventory levels for entire catalog"
+      }
+    , { "options":[[]]
+      , "supportsRefresh": true
+      , "required": false
+      , "type": "multiselect"
+      , "label": "NetSuite locations to pick inventory from"
+      , "value": []
+      , "name": "add_location_setting"
+      , "tooltip": "Inventory export data flow picks the inventory (for all the NetSuite items linked to Walmart) from the chosen NetSuite locations and syncs/exports it to Walmart. If multiple locations are selected, the inventory from all these locations is added to the total and synced to Walmart."
+      }
+    , { "value": true
+      , "name": "kit_inventory_export_kitInventoryCalculationPerLocationEnabled"
+      , "type": "checkbox"
+      , "tooltip": "If enabled, Integration App will first calculate sellable inventory of kit per location using quantity of each member item, and then will send the sum of all the sellable quantities across all the locations. If disabled, Integration App will first calculate the total inventory for each member items across all the locations, and then will calculate inventory for a kit."
+      , "label": "Calculate Kit Inventory per Location"
+      }
+    ]
+  }
+  , "jsonpath":
+    [
+      { "record": "flow-kit-inventory"
+      , "readfrom": "_id"
+      , "writeto": "_id"
+      , "writetopath": "$.flows[?(@._id==\"walmart_kit_inventory_flow\")]"
+    },
+      { "record": "flow-inventory"
+      , "readfrom": "_id"
+      , "writeto": "_id"
+      , "writetopath": "$.flows[?(@._id==\"walmart_inventory_flow\")]"
+      },
+      { "readfrom":
+        [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-inventory"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_toggleNetsuiteExportType_lastquantityavailablechange"
+          }
+        ]
+      , "writeto": "name"
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_toggleNetsuiteExportType\")]"
+      }
+    , { "readfrom":
+        [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-kit-inventory"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_kitInventoryCalculationPerLocationEnabled"
+          }
+        ]
+      , "writeto": "name"
+      , "writetopath": "$.fields[?(@.name==\"kit_inventory_export_kitInventoryCalculationPerLocationEnabled\")]"
+      }
+    , { "readfrom":
+          [
+            {
+              "readfrom": "exports_"
+            }
+          , { "record": "export-inventory"
+            , "readfrom": "_id"
+            }
+          , {
+              "readfrom": "_updateMultipleSavedSearchLocationFilters_listLocations"
+            }
+          ]
+        , "writeto": "name"
+        , "writetopath": "$.fields[?(@.name==\"add_location_setting\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-inventoryExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": 0
+      , "removeAll": true
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_savedSearch_searchId\")].options"
+      }
+    , { "record": "nsConnectorUtil-copy-inventoryExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": "value"
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_savedSearch_searchId\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-inventoryExport-savedsearch"
+      , "readfrom":
+          [
+            {
+              "readfrom": "Celigo Walmart Inventory Export Search ["
+            },
+            {
+              "record": "state",
+              "readfrom": "accountname"
+            },
+            {
+              "readfrom": "]"
+            }
+          ]
+      , "writeto": 0
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_savedSearch_searchId\")].options"
+      }
+    , { "readfrom":
+        [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-inventory"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_savedSearch_listSavedSearches_inv"
+          }
+        ]
+      , "writeto": "name"
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_savedSearch_searchId\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": 0
+      , "removeAll": true
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_kit_items_savedSearch_searchId\")].options"
+      }
+    , { "record": "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": "value"
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_kit_items_savedSearch_searchId\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch"
+      , "readfrom":
+          [
+            {
+              "readfrom": "Celigo Walmart Kit Items Inventory Export Search ["
+            },
+            {
+              "record": "state",
+              "readfrom": "accountname"
+            },
+            {
+              "readfrom": "]"
+            }
+          ]
+      , "writeto": 0
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_kit_items_savedSearch_searchId\")].options"
+      }
+    , { "readfrom":
+        [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-kit-inventory"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_savedSearch_listSavedSearches_kit"
+          }
+        ]
+      , "writeto": "name"
+      , "writetopath": "$.fields[?(@.name==\"inventory_export_kit_items_savedSearch_searchId\")]"
+      }
+   ]
+}

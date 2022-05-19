@@ -1,0 +1,309 @@
+{ "walmartintegration-load":
+    { "dependson": ["state"]
+    , "includeToUpgrade": true
+    , "filelocation": "/configs/integrations/walmartintegration-load.json"
+    }
+, "connection-walmart-http":
+    { "dependson": ["state"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/connections/walmart-http.json"
+    }
+, "export-order-acknowledgment":
+    { "dependson": ["state", "walmartintegration-load"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/exports/order-acknowledgment.json"
+    }
+, "import-order-acknowledgment":
+    { "filelocation": "/configs/imports/order-acknowledgment.json"
+    , "edition" : ["starter", "standard"]
+    , "dependson": ["walmartintegration-load"]
+    }
+, "flow-order-acknowledgment":
+    { "dependson": ["import-order-acknowledgment", "export-order-acknowledgment"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/flows/order-acknowledgment.json"
+    }
+, "export-order":
+    { "dependson": ["state", "walmartintegration-load"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/exports/order.json"
+    }
+, "import-order":
+    { "filelocation": "/configs/imports/order.json"
+    , "edition" : ["starter", "standard"]
+    , "dependson": ["walmartintegration-load"]
+    }
+, "flow-order":
+    { "dependson": ["import-order", "export-order"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/flows/order.json"
+    }
+, "export-customer":
+    { "filelocation": "/configs/exports/customer.json"
+    , "edition": ["starter", "standard"]
+    , "dependson": ["walmartintegration-load"]
+    }
+, "import-customer":
+    { "filelocation": "/configs/imports/customer.json"
+    , "edition": ["starter", "standard"]
+    , "dependson": ["walmartintegration-load"]
+    }
+, "flow-customer":
+    { "filelocation": "/configs/flows/customer.json"
+    , "edition": ["starter", "standard"]
+    , "dependson": ["export-customer", "import-customer"]
+    }
+, "export-fulfillment":
+    { "dependson": ["walmartintegration-load", "nsConnectorUtil-copy-fulfillmentExport-savedsearch"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/exports/fulfillment.json"
+    }
+, "import-fulfillment":
+    { "dependson": ["walmartintegration-load"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/imports/fulfillment.json"
+    }
+, "flow-fulfillment":
+    { "dependson": ["import-fulfillment", "export-fulfillment"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/flows/fulfillment.json"
+    }
+, "export-inventory":
+    { "dependson": ["walmartintegration-load", "nsConnectorUtil-copy-inventoryExport-savedsearch"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/exports/inventory.json"
+    }
+, "import-inventory":
+    { "dependson": ["walmartintegration-load"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/imports/inventory.json"
+    }
+, "flow-inventory":
+    { "dependson": ["import-inventory", "export-inventory"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/flows/inventory.json"
+    }
+, "export-kit-inventory":
+    { "dependson": ["walmartintegration-load", "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/exports/kit-inventory.json"
+    }
+, "import-kit-inventory":
+    { "dependson": ["walmartintegration-load"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/imports/kit-inventory.json"
+    }
+, "flow-kit-inventory":
+    { "dependson": ["import-kit-inventory", "export-kit-inventory"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/flows/kit-inventory.json"
+    }
+, "export-pricing":
+    { "dependson": ["walmartintegration-load", "nsConnectorUtil-copy-pricingExport-savedsearch"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/exports/pricing.json"
+    }
+, "import-pricing":
+    { "dependson": ["walmartintegration-load"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/imports/pricing.json"
+    }
+, "flow-pricing":
+    { "dependson": ["import-pricing", "export-pricing"]
+    , "edition": ["starter", "standard"]
+    , "filelocation": "/configs/flows/pricing.json"
+    }
+, "export-order-on-demand":
+    { "dependson": ["state", "walmartintegration-load"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/exports/order-on-demand.json"
+    }
+, "flow-order-on-demand":
+    { "dependson": ["import-order", "export-order-on-demand"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/flows/order-on-demand.json"
+    }
+, "export-auto-billing-invoice":
+    { "dependson": ["walmartintegration-load", "nsConnectorUtil-copy-autoBillingExport-savedsearch"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/exports/auto-billing-invoice.json"
+    }
+, "import-auto-billing-invoice":
+    { "dependson": ["walmartintegration-load"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/imports/auto-billing-invoice.json"
+    }
+, "flow-auto-billing-invoice":
+    { "dependson": ["import-auto-billing-invoice", "export-auto-billing-invoice"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/flows/auto-billing-invoice.json"
+    }
+, "export-auto-billing-cashsale":
+    { "dependson": ["walmartintegration-load", "nsConnectorUtil-copy-autoBillingExport-savedsearch"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/exports/auto-billing-cashsale.json"
+    }
+, "import-auto-billing-cashsale":
+    { "dependson": ["walmartintegration-load"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/imports/auto-billing-cashsale.json"
+    }
+, "flow-auto-billing-cashsale":
+    { "dependson": ["import-auto-billing-cashsale", "export-auto-billing-cashsale"]
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/flows/auto-billing-cashsale.json"
+    }
+, "general-sync": 
+    {
+        "name": "general-sync"
+      , "edition": ["standard","starter"]
+      , "resolved": true
+      , "dependson": ["state"]
+      , "filelocation": "/configs/sections/general-sync.json"
+    }
+, "order-sync":
+    { "name": "order-sync"
+    , "edition" : ["starter", "standard"]
+    , "resolved": true
+    , "dependson": ["flow-order", "flow-order-acknowledgment", "flow-customer", "flow-order-on-demand"]
+    , "filelocation": "/configs/sections/order-sync.json"
+    }
+, "fulfillment-sync":
+    { "name": "fulfillment-sync"
+    , "edition": ["starter", "standard"]
+    , "resolved": true
+    , "dependson": ["flow-fulfillment", "nsConnectorUtil-copy-fulfillmentExport-savedsearch"]
+    , "filelocation": "/configs/sections/fulfillment-sync.json"
+    }
+, "inventory-sync":
+    { "name": "inventory-sync"
+    , "edition": ["starter", "standard"]
+    , "resolved": true
+    , "dependson": ["flow-inventory", "nsConnectorUtil-copy-inventoryExport-savedsearch", "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch", "flow-kit-inventory"]
+    , "filelocation": "/configs/sections/inventory-sync.json"
+    }
+, "pricing-sync":
+    { "name": "pricing-sync"
+    , "edition": ["starter", "standard"]
+    , "resolved": true
+    , "dependson": ["flow-pricing", "nsConnectorUtil-copy-pricingExport-savedsearch"]
+    , "filelocation": "/configs/sections/pricing-sync.json"
+    }
+, "auto-billing-sync":
+    { "name": "auto-billing-sync"
+    , "edition": ["starter", "standard"]
+    , "resolved": true
+    , "dependson": ["flow-auto-billing-invoice", "flow-auto-billing-cashsale", "nsConnectorUtil-copy-autoBillingExport-savedsearch"]
+    , "filelocation": "/configs/sections/auto-billing-sync.json"
+    }
+, "export-item":
+    { "dependson": ["walmartintegration-load", "nsConnectorUtil-copy-itemExport-savedsearch"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/exports/item.json"
+    }
+, "export-single-item":
+    { "dependson": ["walmartintegration-load", "connection-walmart-http"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/exports/get-item.json"
+    }
+, "import-item":
+    { "dependson": ["walmartintegration-load", "connection-walmart-http", "xml-feed-asynchelper"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/imports/item.json"
+    }
+ , "import-item-status":
+    { "dependson": ["walmartintegration-load", "xml-feed-asynchelper"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/imports/item-status.json"
+    }
+, "import-category-mapping-storage":
+    { "dependson": ["walmartintegration-load"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/imports/category-mapping-storage.json"
+    }
+, "flow-item":
+    { "dependson": ["export-item", "export-single-item", "import-item", "import-item-status", "import-category", "import-category-variation", "import-category-mapping-storage"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/flows/item.json"
+    }
+, "item-sync":
+    { "name": "item-sync"
+    , "edition": ["standard"]
+    , "resolved": true
+    , "dependson": ["flow-item", "nsConnectorUtil-copy-itemExport-savedsearch"]
+    , "filelocation": "/configs/sections/item-sync.json"
+    }
+, "upload-sections":
+    { "name": "upload-sections"
+    , "includeToUpgrade": true
+    , "dependson": ["walmartintegration-load", "connection-walmart-http", "pricing-sync", "auto-billing-sync","general-sync","order-sync", "fulfillment-sync", "inventory-sync", "item-sync", "state", "export-order-acknowledgment", "import-customer", "flow-order-acknowledgment", "import-order", "flow-order-on-demand"]
+    , "filelocation": "/configs/integrations/upload-sections.json"
+    }
+, "nsConnectorUtil-copy-inventoryExport-savedsearch":
+    { "name": "nsConnectorUtil-copy-inventoryExport-savedsearch"
+    , "edition" : ["starter", "standard"]
+    , "filelocation": "/configs/nsConnectorUtil/copyInventoryExportSavedSearch.json"
+    , "dependson": ["walmartintegration-load"]
+    }
+, "nsConnectorUtil-copy-itemExport-savedsearch":
+    { "name": "nsConnectorUtil-copy-itemExport-savedsearch"
+    , "edition" : ["standard"]
+    , "dependson": ["walmartintegration-load"]
+    , "filelocation": "/configs/nsConnectorUtil/copyItemExportSavedSearch.json"
+    }
+, "nsConnectorUtil-copy-fulfillmentExport-savedsearch":
+    { "name": "nsConnectorUtil-copy-fulfillmentExport-savedsearch"
+    , "edition" : ["starter", "standard"]
+    , "dependson": ["walmartintegration-load"]
+    , "filelocation": "/configs/nsConnectorUtil/copyFulfillmentExportSavedSearch.json"
+    }
+, "nsConnectorUtil-copy-pricingExport-savedsearch":
+    { "name": "nsConnectorUtil-copy-pricingExport-savedsearch"
+    , "edition" : ["starter", "standard"]
+    , "dependson": ["walmartintegration-load"]
+    , "filelocation": "/configs/nsConnectorUtil/copyPricingExportSavedSearch.json"
+    }
+, "nsConnectorUtil-copy-autoBillingExport-savedsearch":
+    { "name": "nsConnectorUtil-copy-autoBillingExport-savedsearch"
+    , "edition" : ["starter", "standard"]
+    , "dependson": ["walmartintegration-load"]
+    , "filelocation": "/configs/nsConnectorUtil/copyAutoBillingExportSavedSearch.json"
+    }
+, "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch":
+    { "name": "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch"
+    , "edition" : ["starter", "standard"]
+    , "dependson": ["walmartintegration-load"]
+    , "filelocation": "/configs/nsConnectorUtil/copyKitInventoryExportSavedSearch.json"
+    }
+, "nsConnectorUtil-create-walmartAccount-record":
+  {
+    "name": "nsConnectorUtil-create-walmartAccount-record",
+    "dependson": ["walmartintegration-load", "state"],
+    "filelocation": "/configs/nsConnectorUtil/createWalmartAccountRecord.json"
+  }
+, "walmartintegration-save-accountdetails":
+  {
+    "dependson": ["state", "walmartintegration-load-to-saveaccountdetails"],
+    "filelocation": "/configs/integrations/walmartintegration-save-accountdetails.json"
+  }
+, "walmartintegration-load-to-saveaccountdetails":
+  {
+    "dependson": ["upload-sections"],
+    "filelocation": "/configs/integrations/walmartintegration-load.json"
+  }
+, "export-get-feedsubmissionstatus":
+  { "filelocation": "/configs/exports/get-feedsubmissionstatus.json",
+    "edition": ["standard"],
+    "dependson": ["walmartintegration-load", "connection-walmart-http"]
+  }
+, "export-get-feedsubmissionresult":
+  { "filelocation": "/configs/exports/get-feedsubmissionresult.json",
+    "edition": ["standard"],
+    "dependson": ["walmartintegration-load", "connection-walmart-http"]
+  }
+, "xml-feed-asynchelper":
+  { "filelocation": "./configs/asynchelpers/xml-feed-asynchelper.json",
+    "edition": ["standard"],
+    "dependson": ["walmartintegration-load", "connection-walmart-http", "export-get-feedsubmissionstatus", "export-get-feedsubmissionresult"]
+  }
+}

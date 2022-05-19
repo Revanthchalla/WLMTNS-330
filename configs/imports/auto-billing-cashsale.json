@@ -1,0 +1,48 @@
+{ "data" :
+  { "name": "walmart-auto-billing-cashsale-import-adaptor"
+  , "externalId": "walmart_auto_billing_cashsale_import_adaptor"
+  , "distributed": true
+  , "netsuite_da": {
+    "recordType": "cashsale"
+    , "lookups": []
+    , "mapping":
+      {
+        "fields":
+        [
+          {
+            "generate": "celigo_nlobjTransformId"
+          , "extract": "Sales Order Internal Id"
+          }
+        , {
+            "generate": "celigo_nlobjTransformType"
+          , "hardCodedValue": "salesorder"
+          }
+        ]
+      }
+    , "hooks":
+      { "preMap":
+        { "fileInternalId": null
+        , "function": null
+        }
+      , "postMap":
+        { "fileInternalId": null
+        , "function": "walmartCashSaleImportPostMapHook"
+        }
+      , "postSubmit":
+        { "fileInternalId": null
+        , "function": null
+        }
+      }
+    , "disabled": false
+    , "operation": "add"
+    }
+  }
+  , "resourcetype": "imports"
+  , "jsonpath":
+    [
+      { "record": "walmartintegration-load"
+      , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+      , "writeto": "_connectionId"
+      }
+    ]
+}

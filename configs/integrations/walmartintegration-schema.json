@@ -1,0 +1,140 @@
+{ "data":
+    { "name": "Walmart - NetSuite"
+    , "install":
+      [
+        { "name": "NetSuite Connection"
+        , "description": "Configure NetSuite account credentials"
+        , "imageURL": "/images/company-logos/netsuite.png"
+        , "completed": false
+        , "installerFunction": "verifyNetSuiteConnection"
+        }
+      , { "name": "Walmart Connection"
+        , "description": "Configure Walmart marketplace credentials"
+        , "imageURL": "/images/company-logos/walmart.png"
+        , "completed": false
+        , "installerFunction": "verifyProductConnection"
+        }
+      , { "name": "Integrator Bundle"
+        , "description": "Install Integrator Bundle in NetSuite"
+        , "imageURL": "/images/company-logos/netsuite.png"
+        , "installURL": ""
+        , "completed": false
+        , "installerFunction": "verifyIntegratorBundleInstallation"
+        }
+      , { "name": "Walmart Bundle"
+        , "description": "Install Walmart Bundle in NetSuite"
+        , "imageURL": "/images/company-logos/netsuite.png"
+        , "installURL": ""
+        , "completed": false
+        , "installerFunction": "verifyProductBundleInstallation"
+        }
+      ]
+    , "mode": "install"
+    , "settings" :
+      { 
+         "defaultSectionId": "defaultaccountid"
+      ,  "commonresources":{}
+      ,   "general" : [{
+        "id" : null
+      }]
+      , "storemap": [
+            {
+                "accountname": "defaultaccountname",
+                "accountid": "defaultaccountid",
+                "imports": [
+                {}],
+                "exports": [
+                {}],
+                "flows": [
+                {}],
+                "asyncHelpers": [{}],
+                "savedSearches": [
+                {}],
+                "categoryExportMap": {"null": "null"},
+                "walmartConnectionId": "defaultwalmartConnectionId",
+                "shopInstallComplete": false
+            }]
+      , "sections":
+        [
+          {
+             "shopInstallComplete": false,
+             "title": "Walmart Account",
+             "id": "defaultaccountid",
+             "sections": [
+             {
+                 "temp": "remove_me"
+             }]
+         }]
+      , "supportsMultiStore": true
+      , "storeLabel": "Walmart Account"
+      }
+    }
+  , "resourcetype": "integrations"
+  , "jsonpath":
+    [
+      { "record": "versionInfo"
+      , "readfrom": "version"
+      , "writeto": "version"
+      }
+    , { "record": "connection-walmart"
+      , "readfrom": "_id"
+      , "writeto": "_connectionId"
+      , "writetopath": "$.install[?(@.installerFunction==\"verifyProductConnection\")]"
+      }
+    , { "record": "connection-netsuite"
+      , "readfrom": "_id"
+      , "writeto": "_connectionId"
+      , "writetopath": "$.install[?(@.installerFunction==\"verifyNetSuiteConnection\")]"
+      }
+    , { "record": "state"
+      , "readfrom": "_integrationId"
+      , "writeto": "_id"
+      }
+    , { "record": "connection-netsuite"
+      , "readfrom": "_id"
+      , "writeto": "netsuiteConnectionId"
+      , "writetopath": "$.settings.commonresources"
+      }
+    , { "record": "connection-walmart"
+      , "readfrom": "_id"
+      , "writeto": "walmartConnectionId"
+      , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+      }
+    , {
+        "record": "import-walmart-nsUtil",
+        "readfrom": "_id",
+        "writeto": "nsUtilImportAdaptorId",
+        "writetopath": "$.settings.commonresources"
+      }
+    , {
+        "record": "import-walmart-nsUtil",
+        "readfrom": "apiIdentifier",
+        "writeto": "nsUtilImportAdaptorApiIdentifier",
+        "writetopath": "$.settings.commonresources"
+      }
+    , {
+        "record": "import-category-variation",
+        "readfrom": "apiIdentifier",
+        "writeto": "nsCategoryVariationImportAdaptorApiIdentifier",
+        "writetopath": "$.settings.commonresources"
+      }
+    , {
+        "record": "import-category-variation",
+        "readfrom": "_id",
+        "writeto": "nsCategoryVariationImportAdaptorId",
+        "writetopath": "$.settings.commonresources"
+      }
+    , {
+        "record": "import-category",
+        "readfrom": "apiIdentifier",
+        "writeto": "nsCategoryImportAdaptorApiIdentifier",
+        "writetopath": "$.settings.commonresources"
+      }
+    , {
+        "record": "import-category",
+        "readfrom": "_id",
+        "writeto": "nsCategoryImportAdaptorId",
+        "writetopath": "$.settings.commonresources"
+      }
+    ]
+}

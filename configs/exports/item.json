@@ -1,0 +1,42 @@
+{ "data":
+  { "name": "Export Items from NetSuite"
+  , "externalId": "walmart_item_export_adaptor"
+  , "asynchronous": true
+  , "type": "delta"
+  , "delta":
+    {
+      "dateField": "lastmodifieddate"
+    }
+  , "pageSize" : 500
+  , "netsuite":
+    { "type": "restlet"
+    , "skipGrouping": true
+    , "statsOnly": false
+    , "restlet":
+      { "recordType": "item"
+      , "hooks":
+        {
+          "batchSize": 500
+        , "preSend":
+            {
+              "fileInternalId": null
+            , "function": "walmartItemExportPreSendHook"
+            }
+        }
+      }
+    }
+  }
+  , "resourcetype": "exports"
+  , "jsonpath":
+      [
+        { "record": "walmartintegration-load"
+        , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+        , "writeto": "_connectionId"
+        }
+      , { "record": "nsConnectorUtil-copy-itemExport-savedsearch"
+        , "readfrom": "$[0].searchId"
+        , "writeto": "searchId"
+        , "writetopath": "$.netsuite.restlet"
+        }
+      ]
+}

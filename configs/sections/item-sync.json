@@ -1,0 +1,81 @@
+{ "data":
+  { "title": "Product"
+  , "columns": 1
+  , "flows":
+    [
+      { "_id": "walmart_item_flow"
+      , "showMapping": true
+      , "showSchedule": true
+      , "showUtilityMapping": true
+      }
+    ]
+    , "fields" :
+      [
+        { "label": "NetSuite saved search for syncing Item"
+        , "required": true
+        , "value": "customsearch_celigo_wlmrt_item_se"
+        , "type": "select"
+        , "name": "item_export_savedSearch_searchId"
+        , "supportsRefresh": true
+        , "options":
+          [
+            [
+              "customsearch_celigo_wlmrt_item_se"
+            , "Celigo Walmart Item Export Search"
+            ]
+          ]
+        }
+    ]
+  }
+ , "jsonpath":
+   [
+     { "record": "flow-item"
+     , "readfrom": "_id"
+     , "writeto": "_id"
+     , "writetopath": "$.flows[?(@._id==\"walmart_item_flow\")]"
+     }
+   , { "record": "nsConnectorUtil-copy-itemExport-savedsearch"
+     , "readfrom": "$[0].searchInternalId"
+     , "writeto": 0
+     , "removeAll": true
+     , "writetopath": "$.fields[?(@.name==\"item_export_savedSearch_searchId\")].options"
+     }
+   , { "record": "nsConnectorUtil-copy-itemExport-savedsearch"
+     , "readfrom": "$[0].searchInternalId"
+     , "writeto": "value"
+     , "writetopath": "$.fields[?(@.name==\"item_export_savedSearch_searchId\")]"
+     }
+   , { "record": "nsConnectorUtil-copy-itemExport-savedsearch"
+     , "readfrom":
+         [
+            {
+              "readfrom": "Celigo Walmart Item Export Search ["
+            },
+            {
+                "record": "state",
+                "readfrom": "accountname"
+            },
+            {
+                "readfrom": "]"
+            }
+         ]
+     , "writeto": 0
+     , "writetopath": "$.fields[?(@.name==\"item_export_savedSearch_searchId\")].options"
+     }
+   , { "readfrom":
+        [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-item"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_savedSearch_listSavedSearches"
+          }
+        ]
+     , "writeto": "name"
+     , "writetopath": "$.fields[?(@.name==\"item_export_savedSearch_searchId\")]"
+    }
+   ]
+ }

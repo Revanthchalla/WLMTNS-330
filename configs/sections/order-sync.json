@@ -1,0 +1,600 @@
+{
+  "data": {
+    "title": "Order",
+    "columns": 1,
+    "flows": [{
+      "_id": "walmart_order_flow",
+      "showMapping": true,
+      "showSchedule": true
+    }, {
+      "_id": "walmart_order_on_demand_flow",
+      "showMapping": false,
+      "showSchedule": false,
+      "disableSlider": true,
+      "disableRunFlow": true
+    }, {
+      "_id": "walmart_order_acknowledgment_flow",
+      "showMapping": false,
+      "showSchedule": false
+    }, {
+      "_id": "walmart_customer_flow",
+      "showMapping": true,
+      "showSchedule": false,
+      "disableSlider": true
+    }],
+    "sections": [{
+      "title": "Shipping",
+      "fields": [{
+        "generates": [null],
+        "extracts": [null],
+        "default": "",
+        "allowFailures": false,
+        "supportsGeneratesRefresh": true,
+        "supportsExtractsRefresh": true,
+        "generateFieldHeader": "NetSuite Ship Method",
+        "extractFieldHeader": "Walmart Ship Method",
+        "label": "Ship Method Mapping",
+        "map": {},
+        "tooltip": "Lets you map the shipping methods between Walmart and NetSuite. You can also provide a default value in case no match is found.",
+        "title": "Map Ship Methods",
+        "name": "staticMapWidget_shipmethodLookup",
+        "type": "staticMapWidget"
+      }]
+    }, {
+      "title": "Orders",
+      "fields": [{
+        "label": "On-demand order sync",
+        "tooltip": "Provide up to 10 purchase order numbers separated by a comma (,). Click Save to perform on-demand sync of orders from Walmart to NetSuite. To know more, refer <a href='https://celigosuccess.zendesk.com/hc/en-us/articles/230170548-Walmart-Order-to-NetSuite-Order-Add'>here</a>.",
+        "type": "text",
+        "name": "walmart_on_demand_orders",
+        "value": ""
+      }, {
+        "label": "Auto Acknowledge On Demand Orders",
+        "tooltip": "If checked, Integration App auto acknowledges orders that are imported using the 'Walmart Order Id(s)'. Recommended approach is to keep this box unchecked before you go live with the Integration App & keep it checked once live in Production.",
+        "type": "checkbox",
+        "name": "auto_acknowledge_on_demand_orders",
+        "value": false
+      }, {
+        "label": "Add orders created after",
+        "tooltip": "Lets you define the order creation date in Walmart only after which the orders should be imported into NetSuite.",
+        "type": "datetime",
+        "name": "exports_orderStartDateFilter",
+        "value": ""
+      }]
+    }, {
+      "title": "Tax",
+      "fields": [{
+          "label": "How would you like to bring sales tax into NetSuite?",
+          "tooltip": "This setting allows you to specify your preference on mapping tax totals between NetSuite and Walmart. The leading practice is to overwrite NetSuite tax totals with values from Walmart.",
+          "type": "select",
+          "name": "order_tax_setting_preference",
+          "value": "NETSUITE_CALCULATES",
+          "required": true,
+          "options": [
+            [
+              "OVERRIDE_TAX_TOTALS",
+              "Overwrite taxes with Walmart tax amounts"
+            ],
+            [
+              "NETSUITE_CALCULATES",
+              "NetSuite calculate taxes using its own tax engine"
+            ],
+            [
+              "TOTAL_TAX_AGAINST_SINGLE_LINE",
+              "Add total tax against a single line item on the order"
+            ]
+          ],
+          "dependencies": {
+            "NETSUITE_CALCULATES": {
+              "fields": [{
+                  "label": "Assign the default tax code to all orders",
+                  "hidden": true,
+                  "name": "walmart_order_override_rate_code_always",
+                  "required": false
+                },
+                {
+                  "label": "Per-line taxes on transaction enabled in NetSuite",
+                  "hidden": true,
+                  "name": "walmart_order_item_line_level_tax_enabled",
+                  "required": false
+                },
+                {
+                  "label": "Default tax code when no match is found in NetSuite",
+                  "name": "walmart_order_default_taxable_code",
+                  "hidden": true,
+                  "required": false
+                },
+                {
+                  "label": "NetSuite item to track Walmart tax amount as a line item",
+                  "hidden": true,
+                  "name": "walmart_order_substitute_item_for_tax",
+                  "required": false
+                }
+              ]
+            },
+            "OVERRIDE_TAX_TOTALS": {
+              "fields": [{
+                  "label": "Assign the default tax code to all orders",
+                  "hidden": false,
+                  "name": "walmart_order_override_rate_code_always"
+                },
+                {
+                  "label": "Per-line taxes on transaction enabled in NetSuite",
+                  "hidden": false,
+                  "name": "walmart_order_item_line_level_tax_enabled"
+                },
+                {
+                  "label": "Default tax code when no match is found in NetSuite",
+                  "name": "walmart_order_default_taxable_code",
+                  "hidden": false,
+                  "required": true
+                },
+                {
+                  "label": "NetSuite item to track Walmart tax amount as a line item",
+                  "hidden": true,
+                  "name": "walmart_order_substitute_item_for_tax",
+                  "required": false
+                }
+              ]
+            },
+            "TOTAL_TAX_AGAINST_SINGLE_LINE": {
+              "fields": [{
+                  "label": "Assign the default tax code to all orders",
+                  "hidden": true,
+                  "name": "walmart_order_override_rate_code_always"
+                },
+                {
+                  "label": "Per-line taxes on transaction enabled in NetSuite",
+                  "hidden": false,
+                  "name": "walmart_order_item_line_level_tax_enabled"
+                },
+                {
+                  "label": "NetSuite item to track Walmart tax amount as a line item",
+                  "hidden": false,
+                  "name": "walmart_order_substitute_item_for_tax",
+                  "required": true
+                },
+                {
+                  "label": "Default tax code when no match is found in NetSuite",
+                  "name": "walmart_order_default_taxable_code",
+                  "hidden": true,
+                  "required": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "Per-line taxes on transaction enabled in NetSuite",
+          "tooltip": "Check this box if taxes are enabled in NetSuite at line-level. You can find this preference in NetSuite by navigating to Setup -> Accounting -> Taxes (Setup Taxes).",
+          "type": "checkbox",
+          "name": "walmart_order_item_line_level_tax_enabled",
+          "value": false
+        },
+        {
+          "label": "Default tax code when no match is found in NetSuite",
+          "tooltip": "This is a mandatory setting and requires you to provide the internal id of a default NetSuite tax code. The same is posted to each order or order line when no matching tax code is found inside of NetSuite. You can either create a new tax code or use an existing one set up in your NetSuite account under Setup -> Accounting -> Taxes (Tax Codes).",
+          "type": "text",
+          "name": "walmart_order_default_taxable_code",
+          "required": false,
+          "value": null
+        },
+        {
+          "label": "Assign the default tax code to all orders",
+          "tooltip": "Check this box if you want to assign a default tax code to each order or line item in NetSuite for all the orders received from the Walmart marketplace.",
+          "type": "checkbox",
+          "name": "walmart_order_override_rate_code_always",
+          "value": false
+        },
+        {
+          "label": "NetSuite item to track Walmart tax amount as a line item",
+          "tooltip": "Lets you choose the corresponding NetSuite item to track total sales tax in Walmart against a single line item on the sales order. You need to create an item of \"Non-Inventory\" type in NetSuite and add it here",
+          "type": "select",
+          "name": "walmart_order_substitute_item_for_tax",
+          "supportsRefresh": true,
+          "properties": {
+            "yieldValueAndLabel": true
+          },
+          "options": [],
+          "value": null
+        }
+      ]
+    }, {
+      "title": "Customers",
+      "fields": [{
+        "label": "Default NetSuite customer for all Walmart orders",
+        "tooltip": "Provide the internal id of the default customer record in NetSuite if you prefer to skip the creation of new customer records in NetSuite for each new order from Walmart and assign a default customer record to all the Walmart orders.",
+        "type": "input",
+        "name": "default_customer_id",
+        "value": ""
+      }]
+    }]
+  },
+  "jsonpath": [{
+      "record": "flow-order",
+      "readfrom": "_id",
+      "writeto": "_id",
+      "writetopath": "$.flows[?(@._id==\"walmart_order_flow\")]"
+    }, {
+      "record": "flow-order-on-demand",
+      "readfrom": "_id",
+      "writeto": "_id",
+      "writetopath": "$.flows[?(@._id==\"walmart_order_on_demand_flow\")]"
+    }, {
+      "record": "flow-order-acknowledgment",
+      "readfrom": "_id",
+      "writeto": "_id",
+      "writetopath": "$.flows[?(@._id==\"walmart_order_acknowledgment_flow\")]"
+    }, {
+      "record": "flow-customer",
+      "readfrom": "_id",
+      "writeto": "_id",
+      "writetopath": "$.flows[?(@._id==\"walmart_customer_flow\")]"
+    }, {
+      "readfrom": [{
+        "readfrom": "imports_"
+      }, {
+        "record": "import-order",
+        "readfrom": "_id"
+      }, {
+        "readfrom": "_setDefaultCustomerId"
+      }],
+      "writeto": "name",
+      "writetopath": "$.sections[3].fields[?(@.name==\"default_customer_id\")]"
+    }, {
+      "readfrom": [{
+        "readfrom": "exports_"
+      }, {
+        "record": "export-order",
+        "readfrom": "_id"
+      }, {
+        "readfrom": "_orderStartDateFilter"
+      }],
+      "writeto": "name",
+      "writetopath": "$.sections[1].fields[?(@.name==\"exports_orderStartDateFilter\")]"
+    }, {
+      "readfrom": [{
+        "readfrom": "exports_"
+      }, {
+        "record": "export-order-on-demand",
+        "readfrom": "_id"
+      }, {
+        "readfrom": "_invokeOnDemandOrderImport"
+      }],
+      "writeto": "name",
+      "writetopath": "$.sections[1].fields[?(@.name==\"walmart_on_demand_orders\")]"
+    }, {
+      "readfrom": [{
+        "readfrom": "exports_"
+      }, {
+        "record": "export-order-on-demand",
+        "readfrom": "_id"
+      }, {
+        "readfrom": "_autoAcknowledgeOnDemandOrders"
+      }],
+      "writeto": "name",
+      "writetopath": "$.sections[1].fields[?(@.name==\"auto_acknowledge_on_demand_orders\")]"
+    }, {
+      "readfrom": [{
+        "readfrom": "imports_"
+      }, {
+        "record": "import-order",
+        "readfrom": "_id"
+      }, {
+        "readfrom": "_shipmethodLookup_listWalmartShipMethods_listShipMethods"
+      }],
+      "writeto": "name",
+      "writetopath": "$.sections[0].fields[?(@.name==\"staticMapWidget_shipmethodLookup\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_shouldOverrideBothRateAndCode"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"walmart_order_override_rate_code_always\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_isTransactionLineLevelTaxEnabled"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"walmart_order_item_line_level_tax_enabled\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setTransactionDefaultTaxableCode"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"walmart_order_default_taxable_code\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_shouldOverrideBothRateAndCode"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.OVERRIDE_TAX_TOTALS.fields[?(@.name==\"walmart_order_override_rate_code_always\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_isTransactionLineLevelTaxEnabled"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.OVERRIDE_TAX_TOTALS.fields[?(@.name==\"walmart_order_item_line_level_tax_enabled\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setTransactionDefaultTaxableCode"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.OVERRIDE_TAX_TOTALS.fields[?(@.name==\"walmart_order_default_taxable_code\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "exports_"
+        },
+        {
+          "record": "export-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setSubstituteItemForTaxAmount_listNonInventoryItems_"
+        },
+        {
+          "record": "export-order-on-demand",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.OVERRIDE_TAX_TOTALS.fields[?(@.name==\"walmart_order_substitute_item_for_tax\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_shouldOverrideBothRateAndCode"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.TOTAL_TAX_AGAINST_SINGLE_LINE.fields[?(@.name==\"walmart_order_override_rate_code_always\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_isTransactionLineLevelTaxEnabled"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.TOTAL_TAX_AGAINST_SINGLE_LINE.fields[?(@.name==\"walmart_order_item_line_level_tax_enabled\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setTransactionDefaultTaxableCode"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.TOTAL_TAX_AGAINST_SINGLE_LINE.fields[?(@.name==\"walmart_order_default_taxable_code\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "exports_"
+        },
+        {
+          "record": "export-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setSubstituteItemForTaxAmount_listNonInventoryItems_"
+        },
+        {
+          "record": "export-order-on-demand",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.TOTAL_TAX_AGAINST_SINGLE_LINE.fields[?(@.name==\"walmart_order_substitute_item_for_tax\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_shouldOverrideBothRateAndCode"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.NETSUITE_CALCULATES.fields[?(@.name==\"walmart_order_override_rate_code_always\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_isTransactionLineLevelTaxEnabled"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.NETSUITE_CALCULATES.fields[?(@.name==\"walmart_order_item_line_level_tax_enabled\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setTransactionDefaultTaxableCode"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.NETSUITE_CALCULATES.fields[?(@.name==\"walmart_order_default_taxable_code\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "exports_"
+        },
+        {
+          "record": "export-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setSubstituteItemForTaxAmount_listNonInventoryItems_"
+        },
+        {
+          "record": "export-order-on-demand",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")].dependencies.NETSUITE_CALCULATES.fields[?(@.name==\"walmart_order_substitute_item_for_tax\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "exports_"
+        },
+        {
+          "record": "export-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setSubstituteItemForTaxAmount_listNonInventoryItems_"
+        },
+        {
+          "record": "export-order-on-demand",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"walmart_order_substitute_item_for_tax\")]"
+    },
+    {
+      "readfrom": [{
+          "readfrom": "exports_"
+        },
+        {
+          "record": "export-order",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_setOrderTaxSettingPreference_"
+        },
+        {
+          "record": "export-order-on-demand",
+          "readfrom": "_id"
+        },
+        {
+          "readfrom": "_imports_"
+        },
+        {
+          "record": "import-order",
+          "readfrom": "_id"
+        }
+      ],
+      "writeto": "name",
+      "writetopath": "$.sections[2].fields[?(@.name==\"order_tax_setting_preference\")]"
+    }
+  ]
+}

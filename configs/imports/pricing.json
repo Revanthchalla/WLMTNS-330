@@ -1,0 +1,82 @@
+{ "data": {
+  "name" : "walmart-pricing-import-adaptor",
+  "externalId": "walmart_pricing_import_adaptor",
+  "sampleData": {
+    "Price": {
+      "itemIdentifier": {
+        "sku": "sku-656666666"
+      },
+      "pricingList": {
+        "pricing":
+          {
+            "currentPrice": {
+              "value": {
+                "currency": "USD",
+                "amount": "4.00"
+              }
+            }
+          }
+        }
+     }
+  },
+  "distributed": false
+  , "mapping": {
+    "fields": [
+      { "extract": "SKU"
+      , "generate": "Price.itemIdentifier.sku"
+      }
+    , { "extract": "Currency"
+      , "generate": "Price.pricingList.pricing.currentPrice.value.currency"
+      , "lookupName": "currencyLookup"
+      }
+    , { "extract": "Price"
+      , "generate": "Price.pricingList.pricing.currentPrice.value.amount"
+      }
+    ]
+  },
+  "wrapper":
+  { "function": "import"
+  , "configuration": {
+            "method": "PUT",
+            "apiVersion": "v3",
+            "relativePath": "/price",
+            "resourceType": "import",
+            "applicationAdaptor": "WalmartImportAdaptor",
+            "handler": "WalmartPricingExportHandler",
+            "multipleImports": true,
+            "removeDataFromRequest": false,
+            "headers": {
+                "Accept": "application/xml",
+                "Content-Type": "application/xml"
+            },
+            "requestParser": {
+                "type": "jsontoxml",
+                "parserConfig": {
+                    "arrayPaths": []
+                }
+            },
+            "responseParser": {
+                "type": "xmltojson",
+                "parserConfig": {
+                    "arrayPaths": ["$[\"errors\"][\"error\"]"]
+                }
+            }
+        }
+    , "lookups":[{
+          "name": "currencyLookup"
+        , "allowFailures": false
+        , "map": {
+          "USA" : "USD"
+        }
+      }
+    ]
+  }
+}
+, "resourcetype": "imports"
+, "jsonpath": [
+  { "record": "walmartintegration-load"
+  , "readfrom": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})].walmartConnectionId"
+  , "writeto": "_connectionId"
+  }
+ ]
+}

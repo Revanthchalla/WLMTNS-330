@@ -1,0 +1,137 @@
+{ "data" :
+  { "name": "walmart-orders-export-adaptor"
+  , "externalId": "walmart_orders_export_adaptor"
+  ,  "asynchronous": true
+  , "preserveOrder": false
+  , "wrapper": {
+    "function": "export",
+    "configuration": {
+        "method": "GET",
+        "apiVersion": "v3",
+        "removeDataFromRequest" : true,
+        "pageSizeLimit" : 2,
+        "relativePath": "/orders/released/",
+        "resourceType": "export",
+        "applicationAdaptor": "WalmartExportAdaptor",
+        "handler": "WalmartOrderImportHandler",
+        "createdStartDate": null,
+        "dateField": "createdStartDate",
+        "headers": {
+            "Accept": "application/xml"
+        },
+        "acceptableErrorCodes" : [404],
+        "responseParser": {
+            "type": "xmltojson",
+            "parserConfig": {
+                "arrayPaths": [
+                    "$[\"list\"][\"elements\"][\"order\"]",
+                    "$[\"list\"][\"elements\"][\"order\"][*][\"orderLines\"][\"orderLine\"]",
+                    "$[\"list\"][\"elements\"][\"order\"][*][\"orderLines\"][\"orderLine\"][*][\"charges\"][\"charge\"]"
+                ]
+            }
+        }
+    }
+  }
+  , "pageSize": 20
+  , "sampleData":
+    {
+      "purchaseOrderId": "2575263094491",
+      "customerOrderId": "4091603648841",
+      "customerEmailId": "ruby@walmartlabs.com",
+      "orderDate": "2016-05-18T16:53:14.000Z",
+      "shippingInfo": {
+          "phone": "2342423234",
+          "estimatedDeliveryDate": "2016-06-22T06:00:00.000Z",
+          "estimatedShipDate": "2016-06-15T06:00:00.000Z",
+          "methodCode": "Standard",
+          "postalAddress": {
+              "name": "PGOMS Walmart",
+              "address1": "850 Cherry Avenue",
+              "address2": "Floor 5",
+              "city": "San Bruno",
+              "state": "CA",
+              "postalCode": "94066",
+              "country": "USA",
+              "addressType": "RESIDENTIAL"
+          }
+      },
+      "shippingTotal": "25",
+      "itemTaxTotal": "1.87",
+      "shippingTaxTotal": "1.87",
+      "taxTotal": "3.84",
+      "orderTotal": "1150",
+      "orderLines": {
+          "orderLine": [
+              {
+                  "itemTax":"1.87",
+                  "itemShippingTax":"1.87",
+                  "itemPrice": "1125",
+                  "itemTaxTotal": "3.84",
+                  "shippingTotal": "25",
+                  "total": "1128.84",
+                  "lineNumber": "4",
+                  "item": {
+                      "productName": "Kenmore CF1 or 2086883 Canister Secondary Filter Generic 2 Pack",
+                      "sku": "RCA-OF-444gku444"
+                  },
+                  "charges": {
+                      "charge": [
+                          {
+                              "chargeType": "PRODUCT",
+                              "chargeName": "ItemPrice",
+                              "chargeAmount": {
+                                  "currency": "USD",
+                                  "amount": "1125.00"
+                              },
+                              "tax": {
+                                  "taxName": "Tax1",
+                                  "taxAmount": {
+                                      "currency": "USD",
+                                      "amount": "1.87"
+                                  }
+                              }
+                          },
+                          {
+                              "chargeType": "SHIPPING",
+                              "chargeAmount": {
+                                  "currency": "USD",
+                                  "amount": "25.00"
+                              },
+                              "tax": {
+                                  "taxName": "Tax1",
+                                  "taxAmount": {
+                                      "currency": "USD",
+                                      "amount": "1.87"
+                                  }
+                              }
+                          }
+                      ]
+                  },
+                  "orderLineQuantity": {
+                      "unitOfMeasurement": "EACH",
+                      "amount": "1"
+                  },
+                  "statusDate": "2016-05-18T17:01:26.000Z",
+                  "orderLineStatuses": {
+                      "orderLineStatus": {
+                          "status": "Created",
+                          "statusQuantity": {
+                              "unitOfMeasurement": "EACH",
+                              "amount": "1"
+                          }
+                      }
+                  }
+              }
+          ]
+      }
+    }
+  }
+, "resourcetype": "exports"
+, "jsonpath":
+  [
+    { "record": "walmartintegration-load"
+    , "readfrom": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})].walmartConnectionId"
+    , "writeto": "_connectionId"
+    }
+  ]
+}

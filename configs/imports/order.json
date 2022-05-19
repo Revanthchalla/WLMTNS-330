@@ -1,0 +1,162 @@
+{ "data" :
+  { "name" : "walmart-order-import-adaptor"
+  , "externalId": "walmart_order_import_adaptor"
+  , "distributed": true
+  , "hooks":
+        { "preMap":
+            { "function": "walmartOrderImportPreMapHook"
+            }
+        }
+  , "netsuite_da": {
+    "recordType": "salesorder"
+    , "lookups":
+      [
+        {
+          "name": "shipmethodLookup"
+        , "allowFailures": false
+        , "map": {}
+        },
+        { "name": "shipcountryLookup"
+        , "allowFailures": false
+        , "recordType": "CUSTOMRECORD_CELIGO_IMPORT_LOOKUP"
+        , "resultField": "custrecord_celigo_import_lookup_val"
+        , "expression": "[\"custrecord_celigo_import_lookup_key\",\"is\",\"{{shippingInfo.postalAddress.country}}\"]"
+        },
+        { "name": "item_itemLookup"
+        , "allowFailures": false
+        , "recordType": "item"
+        , "resultField": "internalid"
+        , "expression": "[\"itemid\",\"is\",\"{{orderLines.orderLine[*].item.sku}}\"]"
+        }
+      ]
+    , "mapping":
+    {
+          "fields": [
+              {
+                  "generate": "trandate",
+                  "extract": "orderDate"
+              },
+              {
+                  "generate": "entity",
+                  "extract": "netSuiteCustomerId"
+              },
+              {
+                  "generate": "custbody_celigo_etail_channel",
+                  "hardCodedValue": "Walmart"
+              },
+              {
+                  "generate": "custbody_celigo_etail_order_id",
+                  "extract": "purchaseOrderId"
+              },
+              {
+                  "generate": "custbody_celigo_etail_merchant_orderid",
+                  "extract": "customerOrderId"
+              },
+              {
+                  "generate": "otherrefnum",
+                  "extract": "customerOrderId"
+              },
+              {
+                  "generate": "shipphone",
+                  "extract": "shippingInfo.phone"
+              },
+              {
+                "generate": "shipcity",
+                "extract": "shippingInfo.postalAddress.city"
+              },
+              {
+                "generate": "shipcountry",
+                "lookupName": "shipcountryLookup"
+              },
+              {
+                "generate": "shipmethod",
+                "extract": "shippingInfo.methodCode",
+                "lookupName": "shipmethodLookup",
+                "internalId": true
+              },
+              {
+                  "generate": "shipstate",
+                  "extract": "shippingInfo.postalAddress.state"
+              },
+              {
+                  "generate": "shipzip",
+                  "extract": "shippingInfo.postalAddress.postalCode"
+              },
+              {
+                  "generate": "shipaddressee",
+                  "extract": "shippingInfo.postalAddress.name"
+              },
+              {
+                  "generate": "shipaddr1",
+                  "extract": "shippingInfo.postalAddress.address1"
+              },
+              {
+                  "generate": "shipaddr2",
+                  "extract": "shippingInfo.postalAddress.address2"
+              },
+              {
+                  "generate": "shippingcost",
+                  "extract": "shippingTotal"
+              }
+          ],
+          "lists": [
+              {
+                  "generate": "item",
+                  "fields": [
+                      {
+                          "generate": "item",
+                          "lookupName": "item_itemLookup",
+                          "internalId": true
+                      },
+                      {
+                          "generate": "rate",
+                          "extract": "orderLines.orderLine[*].itemPrice"
+                      },
+                      {
+                          "generate": "price",
+                          "hardCodedValue": -1
+                      },
+                      {
+                          "generate": "quantity",
+                          "extract": "orderLines.orderLine[*].orderLineQuantity.amount"
+                      },
+                      {
+                          "generate": "custcol_celigo_etail_order_line_id",
+                          "extract": "orderLines.orderLine[*].lineNumber",
+                          "dataType": "string"
+                      },
+                      {
+                        "generate": "custcol_celigo_etail_order_line_tax",
+                        "extract": "orderLines.orderLine[*].itemTaxTotal"
+                      }
+                  ]
+              }
+          ]
+      }
+    , "hooks":
+      { "preMap":
+        { "fileInternalId": null
+        , "function": null
+        }
+      , "postMap":
+        { "fileInternalId": null
+        , "function": "walmartOrderImportPostMapHook"
+        }
+      , "postSubmit":
+        { "fileInternalId": null
+        , "function": "walmartOrderImportPostSubmitHook"
+        }
+      }
+    , "disabled": false
+    , "operation": "add"
+    }
+  }
+, "resourcetype": "imports"
+, "jsonpath":
+  [
+    { "record": "walmartintegration-load"
+    , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+    , "writeto": "_connectionId"
+    }
+  ]
+}

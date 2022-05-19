@@ -1,0 +1,36 @@
+{ "data":
+  { "name": "walmart-auto-billing-cashsale-export-adaptor"
+  , "externalId": "walmart_auto_billing_cashsale_export_adaptor"
+  , "asynchronous": true
+  , "type": "once"
+  , "once": {
+      "booleanField": "custbody_celigo_etail_auto_bill_exp"
+    }
+  , "netsuite":
+    { "type": "restlet"
+    , "skipGrouping": true
+    , "restlet":
+      { "recordType": "salesorder"
+      , "hooks": {
+          "preSend": {
+          "function": "walmartAutoBillingCashSaleExportPreSendHook"
+          }
+        }
+      }
+    }
+  }
+  , "resourcetype": "exports"
+  , "jsonpath":
+  [
+    { "record": "walmartintegration-load"
+    , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+    , "writeto": "_connectionId"
+    }
+  , { "record": "nsConnectorUtil-copy-autoBillingExport-savedsearch"
+    , "readfrom": "$[0].searchId"
+    , "writeto": "searchId"
+    , "writetopath": "$.netsuite.restlet"
+    }
+  ]
+
+}

@@ -1,0 +1,93 @@
+{
+  "deleteDomainsInParallel": false,
+  "domains": [
+    {
+      "name": "netsuite",
+      "resourceTypes": [
+        {
+          "name": "savedSearch",
+          "action": "delete",
+          "readFrom": "storeMap",
+          "readFromPath": [
+            "$.savedSearches"
+          ]
+        },
+        {
+          "name": "customrecord_celigo_wlmrt_account_info",
+          "action": "searchAndDeactivate",
+          "read": "custrecord_celigo_wlmrt_account_id",
+          "readFrom": "storeMap",
+          "readFromPath": [
+            "$.accountid"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "integrator",
+      "resourceTypes": [
+        {
+          "name": "flows",
+          "action": "delete"
+        },
+        {
+          "name": "imports",
+          "action": "delete",
+          "dependencies": [
+            {
+              "resourceType": "asyncHelpers",
+              "dependencyPath": "$.http._asyncHelperId"
+            }
+          ]
+        },
+        {
+          "name": "asyncHelpers",
+          "action": "delete",
+          "dependencies": [
+            {
+              "resourceType": "exports",
+              "dependencyPath": "$.http.status._exportId"
+            },
+            {
+              "resourceType": "exports",
+              "dependencyPath": "$.http.result._exportId"
+            }
+          ]
+        },
+        {
+          "name": "exports",
+          "action": "delete"
+        },
+        {
+          "name": "connections",
+          "action": "delete",
+          "readFrom": "storeMap",
+          "readFromPath": [
+            "$.walmartHttpConnectionId",
+            "$.walmartConnectionId"
+          ]
+        },
+        {
+          "lastStoreResource": true,
+          "name": "imports",
+          "action": "delete",
+          "readFrom": "commonresources",
+          "readFromPath": [
+            "$.nsUtilImportAdaptorId",
+            "$.nsCategoryImportAdaptorId",
+            "$.nsCategoryVariationImportAdaptorId"
+          ]
+        },
+        {
+          "lastStoreResource": true,
+          "name": "connections",
+          "action": "delete",
+          "readFrom": "commonresources",
+          "readFromPath": [
+            "$.netsuiteConnectionId"
+          ]
+        }
+      ]
+    }
+  ]
+}

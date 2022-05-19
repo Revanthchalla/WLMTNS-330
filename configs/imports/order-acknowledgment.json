@@ -1,0 +1,54 @@
+{ "data" :
+  {
+  "name" : "walmart-order-acknowledgement-import-adaptor",
+  "externalId": "walmart_order_acknowledgement_import_adaptor",
+  "sampleData": {
+    "purchaseOrderId": "23"
+  },
+  "distributed": false,
+  "mapping": {
+    "fields": [
+      {
+        "extract": "purchaseOrderId",
+        "generate": "walmartOrderId"
+      }
+    ]
+  },
+  "wrapper": {
+    "function": "import",
+    "configuration": {
+      "method": "POST",
+      "apiVersion": "v3",
+      "relativePath": "/orders/{{purchaseOrderId}}/acknowledge",
+      "resourceType": "import",
+      "applicationAdaptor": "WalmartImportAdaptor",
+      "handler": "WalmartOrderAcknowledgementExportHandler",
+      "multipleImports": true,
+      "removeDataFromRequest": true,
+      "headers": {
+        "Accept": "application/xml",
+        "Content-Type": "application/xml"
+      },
+      "responseParser": {
+        "type": "xmltojson",
+        "parserConfig": {
+          "arrayPaths": [
+            "$[\"errors\"][\"error\"]",
+            "$[\"list\"][\"elements\"][\"order\"]",
+            "$[\"list\"][\"elements\"][\"order\"][*][\"orderLines\"][\"orderLine\"]",
+            "$[\"list\"][\"elements\"][\"order\"][*][\"orderLines\"][\"orderLine\"][*][\"charges\"][\"charge\"]"
+          ]
+        }
+      }
+    }
+  }
+}
+, "resourcetype": "imports"
+, "jsonpath":
+  [
+    { "record": "walmartintegration-load"
+    , "readfrom": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})].walmartConnectionId"
+    , "writeto": "_connectionId"
+    }
+  ]
+}

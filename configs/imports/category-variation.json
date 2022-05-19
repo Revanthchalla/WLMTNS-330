@@ -1,0 +1,87 @@
+{
+    "data": {
+        "name": "Walmart Variation Attribute Import Adaptor",
+        "externalId": "walmart_variation_attribute_import_adaptor",
+        "description": "Imports Walmart Category Variation Attributes into NetSuite.",
+        "responseTransform": {
+            "version": "1"
+        },
+        "distributed": true,
+        "netsuite_da": {
+            "operation": "addupdate",
+            "recordType": "customrecord_celigo_wlmrt_var_attribute",
+            "internalIdLookup": {
+                "expression": "[[\"custrecord_celigo_wlmrt_account_id_ref\",\"is\",\"{{{account_id}}}\"],\"AND\",[\"custrecord_celigo_wlmrt_category_id_ref\",\"is\",\"{{{category_id}}}\"],\"AND\",[\"custrecord_celigo_wlmrt_field_id\",\"is\",\"{{{variation_attribute}}}\"]]"
+            },
+            "lookups": [
+                {
+                    "name": "walmart_category_look_up_from_category_id",
+                    "recordType": "customrecord_celigo_wlmrt_category",
+                    "allowFailures": false,
+                    "resultField": "internalid",
+                    "expression": "[\"custrecord_celigo_wlmrt_category_id\",\"is\",\"{{{category_id}}}\"]",
+                    "map": null
+                },
+                {
+                    "name": "walmart_account_look_up_from_account_id",
+                    "recordType": "customrecord_celigo_wlmrt_account_info",
+                    "allowFailures": false,
+                    "resultField": "internalid",
+                    "expression": "[\"custrecord_celigo_wlmrt_account_id\",\"is\",\"{{{account_id}}}\"]",
+                    "map": null
+                }
+            ],
+            "mapping": {
+                "lists": [],
+                "fields": [
+                    {
+                        "generate": "name",
+                        "extract": "name",
+                        "internalId": false,
+                        "immutable": false
+                    },
+                    {
+                        "generate": "custrecord_celigo_wlmrt_field_id",
+                        "extract": "variation_attribute",
+                        "internalId": false,
+                        "immutable": false
+                    },
+                    {
+                        "generate": "custrecord_celigo_wlmrt_category_ref",
+                        "extract": "category_id",
+                        "internalId": true,
+                        "lookupName": "walmart_category_look_up_from_category_id",
+                        "immutable": false
+                    },
+                    {
+                        "generate": "custrecord_celigo_wlmrt_account_ref",
+                        "extract": "account_id",
+                        "internalId": true,
+                        "lookupName": "walmart_account_look_up_from_account_id",
+                        "immutable": false
+                    },
+                    {
+                        "generate": "custrecord_celigo_wlmrt_ns_var_attribut",
+                        "extract": "ns_attribute",
+                        "internalId": false,
+                        "immutable": false
+                    }
+                ]
+            },
+            "hooks": {
+                "postMap": {
+                    "fileInternalId": null,
+                    "function": "walmartVariationAttributeMappingImportPostMapHook"
+                }
+            }
+        }
+    },
+    "resourcetype": "imports",
+    "jsonpath": [
+        {
+            "record": "connection-netsuite",
+            "readfrom": "_id",
+            "writeto": "_connectionId"
+        }
+    ]
+}

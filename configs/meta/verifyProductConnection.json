@@ -1,0 +1,9 @@
+{ "walmartintegration-load":
+    { "dependson": ["state"]
+    , "filelocation": "/configs/integrations/walmartintegration-load.json"
+    }
+, "walmartintegration-completestep-walmartconnection":
+    { "dependson": ["state", "walmartintegration-load"]
+    , "filelocation": "/configs/integrations/walmartintegration-completestep-walmartconnection.json"
+    }
+}

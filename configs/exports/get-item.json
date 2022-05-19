@@ -1,0 +1,40 @@
+{
+  "data": {
+    "name": "Walmart-single-item-export-adaptor",
+    "externalId": "walmart_single_item_export_adaptor",  
+    "asynchronous": true,
+    "http": {
+      "relativeURI": "/items?sku={{{data.sku}}}",
+      "method": "GET",
+      "body": "{{data.sku}}",
+      "successMediaType": "xml",
+      "errorMediaType": "xml",
+      "response": {
+        "resourcePath": "/ItemResponses/ItemResponse",
+        "errorPath": "/errors/error/code/text()"
+      }
+    },
+    "transform": {
+      "version": "1",
+      "rules": [
+        [
+          {
+            "generate": "publishedStatus",
+            "extract": "/publishedStatus"
+          },
+          {
+            "generate": "wpid",
+            "extract": "/wpid"
+          }
+        ]
+      ]
+    }
+  },
+  "resourcetype": "exports",
+  "jsonpath": [
+    { "record": "connection-walmart-http"
+    , "readfrom": "_id"
+    , "writeto": "_connectionId"
+    }
+  ]
+}

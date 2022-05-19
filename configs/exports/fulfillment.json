@@ -1,0 +1,37 @@
+{
+  "data": {
+    "name": "walmart-fulfillment-export-adaptor"
+    , "externalId": "walmart_fulfillment_export_adaptor"
+    , "asynchronous": true
+    , "type": "once"
+    , "once": {
+      "booleanField": "custbody_celigo_etail_order_fulfilled"
+    }
+    , "netsuite":
+        { "type": "restlet"
+        , "skipGrouping": false
+        , "restlet":
+            { "recordType": "itemfulfillment"
+            , "hooks":
+                { "preSend":
+                    { "fileInternalId": null
+                    , "function": "walmartFulfillmentExportPreSendHook"
+                    }
+                }
+            }
+        }
+    }
+  , "resourcetype": "exports"
+  , "jsonpath":
+  [
+    { "record": "walmartintegration-load"
+    , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+    , "writeto": "_connectionId"
+    }
+  , { "record": "nsConnectorUtil-copy-fulfillmentExport-savedsearch"
+    , "readfrom": "$[0].searchId"
+    , "writeto": "searchId"
+    , "writetopath": "$.netsuite.restlet"
+    }
+  ]
+}

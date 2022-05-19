@@ -1,0 +1,10 @@
+{ "data" :
+  { "name": "walmart-orders-acknowledgement-export-adaptor"
+  , "externalId": "walmart_orders_acknowledgement_export_adaptor"
+  , "type": "webhook"
+  , "webhook": {
+    "provider": "integrator-extension"
+    }
+  }
+, "resourcetype": "exports"
+}

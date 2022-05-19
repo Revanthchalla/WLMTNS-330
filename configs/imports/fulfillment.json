@@ -1,0 +1,146 @@
+{ "data" :{
+  "name" : "walmart-fulfillment-import-adaptor",
+  "externalId": "walmart_fulfillment_import_adaptor",
+  "sampleData": {
+    "orderShipment": {
+      "orderLines": {
+        "orderLine": [
+          {
+            "orderLineStatuses": {
+              "orderLineStatus": {
+                "trackingInfo": {
+                  "trackingURL": "http://www.fedex.com",
+                  "trackingNumber": "12333634122",
+                  "methodCode": "Standard",
+                  "carrierName": {
+                    "carrier": "FedEx"
+                  },
+                  "shipDateTime": "2016-06-27T05:30:15Z"
+                },
+                "statusQuantity": {
+                  "amount": "1",
+                  "unitOfMeasurement": "Each"
+                },
+                "status": "Shipped"
+              }
+            },
+            "lineNumber": "2"
+          },
+          {
+            "orderLineStatuses": {
+              "orderLineStatus": {
+                "trackingInfo": {
+                  "trackingURL": "http://www.fedex.com",
+                  "trackingNumber": "jdhfjkshfjh",
+                  "methodCode": "Standard",
+                  "carrierName": {
+                    "carrier": "Custom"
+                  },
+                  "shipDateTime": "2016-06-27T05:30:15Z"
+                },
+                "statusQuantity": {
+                  "amount": "1",
+                  "unitOfMeasurement": "Each"
+                },
+                "status": "Shipped"
+              }
+            },
+            "lineNumber": "3"
+          }
+        ]
+      }
+    }
+  },
+  "distributed": false,
+  "hooks": {
+    "preMap": {
+      "function": "walmartFulfillmentExportPreMapHook"
+    }
+  },
+  "mapping": {
+    "lists": [
+      {
+        "fields": [
+          {
+            "extract": "*.[eTail Order Line Id]",
+            "generate": "lineNumber"
+          },
+          {
+            "generate": "orderLineStatuses.orderLineStatus.status",
+            "hardCodedValue": "Shipped"
+          },
+          {
+            "generate": "orderLineStatuses.orderLineStatus.statusQuantity.unitOfMeasurement",
+            "hardCodedValue": "Each"
+          },
+          {
+            "extract": "*.Quantity",
+            "generate": "orderLineStatuses.orderLineStatus.statusQuantity.amount"
+          },
+          {
+            "extract": "[Shipping Date]",
+            "generate": "orderLineStatuses.orderLineStatus.trackingInfo.shipDateTime"
+          },
+          {
+            "extract": "[Ship Method]",
+            "generate": "orderLineStatuses.orderLineStatus.trackingInfo.carrierName.carrier"
+          },
+          {
+            "extract": "[Ship Method]",
+            "generate": "orderLineStatuses.orderLineStatus.trackingInfo.methodCode",
+            "lookupName": "shipmethodLookup",
+            "dataType": "string"
+          },
+          {
+            "extract": "*.[Tracking Number]",
+            "generate": "orderLineStatuses.orderLineStatus.trackingInfo.trackingNumber"
+          }
+        ],
+        "generate": "orderShipment.orderLines.orderLine"
+      }
+    ]
+  },
+  "wrapper": {
+    "function": "import",
+    "configuration": {
+            "method": "POST",
+            "apiVersion": "v3",
+            "relativePath": "/orders/{{[eTail Order Id]}}/shipping",
+            "resourceType": "import",
+            "applicationAdaptor": "WalmartImportAdaptor",
+            "handler": "WalmartFulfillmentExportHandler",
+            "multipleImports": true,
+            "removeDataFromRequest": false,
+            "headers": {
+                "Accept": "application/xml",
+                "Content-Type": "application/xml"
+            },
+            "requestParser": {
+                "type": "jsontoxml",
+                "parserConfig": {
+                    "arrayPaths": []
+                }
+            },
+            "responseParser": {
+                "type": "xmltojson",
+                "parserConfig": {
+                    "arrayPaths": ["$[\"errors\"][\"error\"]"]
+                }
+            }
+        },
+    "lookups": [
+        { "name": "shipmethodLookup"
+        , "allowFailures": false
+        , "map": {}
+        }
+      ]
+  }
+}
+, "resourcetype": "imports"
+, "jsonpath": [
+  { "record": "walmartintegration-load"
+  , "readfrom": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})].walmartConnectionId"
+  , "writeto": "_connectionId"
+  }
+ ]
+}

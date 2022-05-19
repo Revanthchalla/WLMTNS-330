@@ -1,0 +1,75 @@
+{
+  "data": {
+    "name": "walmart-item-status-import-adaptor",
+    "externalId": "walmart_item_status_import_adaptor",
+    "distributed": true,
+    "filter": {
+      "version": "1",
+      "rules": [
+        "matches",
+        [
+          "string",
+          [
+            "extract",
+            "ingestionStatus"
+          ]
+        ],
+        "SUCCESS"
+      ]
+    },
+    "netsuite_da": {
+      "recordType": "customrecord_celigo_wlmrt_item_account",
+      "lookups": [],
+      "mapping": {
+        "fields": [
+          {
+            "generate": "custrecord_celigo_wlmrt_wpid",
+            "extract": "['wpid']",
+            "internalId": false,
+            "immutable": false
+          },
+          {
+            "generate": "custrecord_celigo_wlmrt_itemid",
+            "extract": "['itemid']",
+            "internalId": false,
+            "immutable": false
+          },
+          {
+            "generate": "custrecord_celigo_wlmrt_account",
+            "extract": "['Account Name']",
+            "internalId": false,
+            "immutable": false
+          },
+          {
+            "generate": "custrecord_celigo_wlmrt_item_nsid",
+            "extract": "['id']",
+            "internalId": true,
+            "immutable": false
+          },
+          {
+            "generate": "custrecord_celigo_wlmt_account_id",
+            "extract": "['Account ID']",
+            "internalId": false,
+            "immutable": false
+          }
+        ],
+        "lists": []
+      },
+      "hooks": {},
+      "disabled": false,
+      "ioEnvironment": "",
+      "operation": "addupdate",
+      "internalIdLookup": {
+        "expression": "[[\"custrecord_celigo_wlmt_account_id\",\"is\",\"{{{[Account ID]}}}\"],\"AND\",[\"custrecord_celigo_wlmrt_item_nsid\",\"anyof\",\"{{{id}}}\"]]"
+      }
+    }
+  },
+  "resourcetype": "imports",
+  "jsonpath": [
+    {
+      "record": "walmartintegration-load",
+      "readfrom": "$.settings.commonresources.netsuiteConnectionId",
+      "writeto": "_connectionId"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{ "data" :
+  {
+    "name": "Walmart XML Feed AsyncHelper",
+    "distributed": false,
+    "http": {
+      "submit": {
+        "sameAsStatus": false,
+        "resourcePath": "/FeedAcknowledgement",
+        "transform": {
+          "version": "1",
+          "rules": [
+            [
+              {
+                "extract": "/feedId",
+                "generate": "feedId"
+              }
+            ]
+          ]
+        }
+      }
+    , "status": {
+        "statusPath": "feedStatus[0]._",
+        "initialWaitTime": 5,
+        "pollWaitTime": 15,
+        "doneValues": ["PROCESSED", "ERROR"],
+        "inProgressValues": ["INPROGRESS", "RECEIVED"]
+      }
+    , "result": {}
+    }
+  }
+, "resourcetype": "asynchelpers"
+, "jsonpath": [
+    { "record": "connection-walmart-http"
+    , "readfrom": "_id"
+    , "writeto": "_connectionId"
+    }
+  , { "record": "export-get-feedsubmissionstatus"
+    , "readfrom": "_id"
+    , "writetopath": "$.http.status"
+    , "writeto": "_exportId"
+    }
+  , { "record": "export-get-feedsubmissionresult"
+    , "readfrom": "_id"
+    , "writetopath": "$.http.result"
+    , "writeto": "_exportId"
+    }
+  , { "record": "state"
+    , "readfrom": "connectorConstants.WALMART_CONNECTORID"
+    , "writeto": "_connectorId"
+    }
+  ]
+}

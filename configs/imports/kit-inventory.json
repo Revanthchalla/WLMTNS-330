@@ -1,0 +1,75 @@
+{ "data" :{
+  "name" : "walmart-kit-inventory-import-adaptor",
+  "externalId": "walmart_kit_inventory_import_adaptor",
+  "sampleData": {
+    "inventory": {
+      "sku": "10210321",
+      "quantity": {
+        "unit": "EACH",
+        "amount": "20"
+      },
+      "fulfillmentLagTime": "5"
+    }
+  },
+  "distributed": false,
+  "mapping": {
+    "fields": [
+      {
+        "extract": "SKU",
+        "generate": "inventory.sku"
+      },
+      {
+        "extract": "Quantity",
+        "generate": "inventory.quantity.amount"
+      },
+      {
+        "generate": "inventory.quantity.unit",
+        "hardCodedValue": "EACH"
+      },
+      {
+        "generate": "inventory.fulfillmentLagTime",
+        "hardCodedValue": "5"
+      }
+    ]
+  },
+  "wrapper":
+  { "function": "import"
+  , "configuration": {
+            "method": "PUT",
+            "apiVersion": "v3",
+            "relativePath": "/inventory?sku={{SKU}}",
+            "resourceType": "import",
+            "applicationAdaptor": "WalmartImportAdaptor",
+            "handler": "WalmartInventoryExportHandler",
+            "multipleImports": true,
+            "removeDataFromRequest": false,
+            "headers": {
+                "Accept": "application/xml" ,
+                "Content-Type": "application/xml",
+                "Host":"marketplace.walmartapis.com"
+            },
+            "requestParser": {
+                "type": "jsontoxml",
+                "parserConfig": {
+                    "arrayPaths": []
+                }
+            },
+            "responseParser": {
+                "type": "xmltojson",
+                "parserConfig": {
+                    "arrayPaths": ["$[\"errors\"][\"error\"]"]
+                }
+            }
+        }
+  , "lookups": []
+  }
+
+}
+, "resourcetype": "imports"
+, "jsonpath": [
+  { "record": "walmartintegration-load"
+  , "readfrom": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})].walmartConnectionId"
+  , "writeto": "_connectionId"
+  }
+ ]
+}

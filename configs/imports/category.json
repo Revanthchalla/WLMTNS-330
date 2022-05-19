@@ -1,0 +1,120 @@
+{
+    "data": {
+        "name": "Walmart Category Mapping Import",
+        "externalId": "walmart_category_mapping_import_adaptor",
+        "description": "Imports Category (Walmart Category) and Category Mappings (Etail Record Mapping) into NetSuite.",
+        "distributed": true,
+        "netsuite_da": {
+            "recordType": "customrecord_celigo_etail_rec_cat_map",
+            "lookups": [
+                {
+                    "name": "custrecord_celigo_wlmrt_accountLookup",
+                    "allowFailures": false,
+                    "recordType": "customrecord_celigo_wlmrt_account_info",
+                    "resultField": "internalid",
+                    "expression": "[\"custrecord_celigo_wlmrt_account_id\",\"is\",\"{{account_id}}\"]"
+                },
+                {
+                    "name": "categoryInternalIdLookup",
+                    "allowFailures": true,
+                    "recordType": "customrecord_celigo_wlmrt_category",
+                    "resultField": "internalid",
+                    "expression": "[[\"externalid\",\"is\",\"{{category.category_id}}\"]]",
+                    "default": null
+                }
+            ],
+            "mapping": {
+                "fields": [
+                    {
+                        "generate": "custrecord_celigo_etail_cat_id",
+                        "extract": "category.category_id"
+                    },
+                    {
+                        "generate": "custrecord_celigo_etail_root_cat_id",
+                        "extract": "category.root_category_id"
+                    },
+                    {
+                        "generate": "custrecord_celigo_wlmrt_account",
+                        "extract": "account_id",
+                        "lookupName": "custrecord_celigo_wlmrt_accountLookup",
+                        "internalId": true
+                    },
+                    {
+                        "generate": "custrecord_celigo_etail_rec_map_acc_id",
+                        "extract": "account_id"
+                    },
+                    {
+                        "generate": "custrecord_celigo_etail_attr_fields_id",
+                        "extract": "attributes"
+                    },
+                    {
+                        "generate": "custrecord_celigo_etal_var_attr",
+                        "extract": "variation_attributes"
+                    },
+                    {
+                        "generate": "category_id",
+                        "extract": "category.category_id"
+                    },
+                    {
+                        "generate": "category_name",
+                        "extract": "category.category_name"
+                    },
+                    {
+                        "generate": "root_category_id",
+                        "extract": "category.root_category_id"
+                    },
+                    {
+                        "generate": "root_category_name",
+                        "extract": "category.root_category_name"
+                    },
+                    {
+                        "generate": "marketplace_domain",
+                        "extract": "category.marketplace_domain"
+                    },
+                    {
+                        "generate": "is_leaf_node",
+                        "extract": "category.is_leaf_node"
+                    },
+                    {
+                        "generate": "category",
+                        "extract": "category"
+                    },
+                    {
+                        "generate": "categoryInternalId",
+                        "extract": "category.category_id",
+                        "lookupName": "categoryInternalIdLookup"
+                    },
+                    {
+                        "generate": "custrecord_celigo_etail_chan",
+                        "hardCodedValue": "Walmart"
+                    },
+                    {
+                        "generate": "account_id",
+                        "extract": "account_id"
+                    }
+                ],
+                "lists": []
+            },
+            "hooks": {
+                "postMap": {
+                    "fileInternalId": null,
+                    "function": "walmartEtailRecordMappingImportPostMapHook"
+                }
+            },
+            "disabled": false,
+            "ioEnvironment": "",
+            "operation": "addupdate",
+            "internalIdLookup": {
+                "expression": "[[\"custrecord_celigo_etail_rec_map_acc_id\",\"is\",\"{{account_id}}\"],\"AND\",[\"custrecord_celigo_etail_cat_id\",\"is\",\"{{category.category_id}}\"],\"AND\",[\"custrecord_celigo_etail_chan.name\",\"is\",\"Walmart\"]]"
+            }
+        }
+    },
+    "resourcetype": "imports",
+    "jsonpath": [
+        {
+            "record": "connection-netsuite",
+            "readfrom": "_id",
+            "writeto": "_connectionId"
+        }
+    ]
+}

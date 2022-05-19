@@ -1,0 +1,81 @@
+[
+    {
+        "steps": [
+            {
+                "title": "Data Flows",
+                "intro": "This section allows you to configure and manage the data flows. Data flows are used to export data out of one application and import it into another application."
+            },
+            {
+                "title": "Connections",
+                "intro": "This section allows you to manage NetSuite and Walmart connections. Connections are used to store credentials, along with other access information for an application or system."
+            },
+            {
+                "title": "Monitoring",
+                "intro": "This section allows you to share this Integration App with other Integrator.io users in read-only mode. They will have the ability to view jobs, errors, retries, and run flows."
+            },
+            {
+                "title": "Subscription",
+                "intro": "This section gives you the details of the current edition of the Integration App and the license expiry date."
+            },
+            {
+                "title": "Notifications",
+                "intro": "This section allows you to subscribe to email alerts whenever errors happen on the data flows and connections."
+            },
+            {
+                "title": "Uninstall",
+                "intro": "This section allows you to uninstall the Integration App from your account."
+            }
+        ]
+    },
+    {
+      "steps" : [
+        {
+            "title": "Order",
+            "parent": "Data Flows",
+            "intro": "This data flow imports new orders from Walmart as sales orders in NetSuite. It automatically acknowledges the order in Walmart as soon it is imported. It also imports Customer information into NetSuite."
+        }
+      ]
+    },
+    {
+        "title": "Order",
+        "parent": "Data Flows",
+        "steps": [
+            {
+                "element": "flows",
+                "intro": "This section lets you manage the individual data flows."
+            },
+            {
+              "element": "flows[1].mappings",
+              "intro": "This section provides powerful options to map & transform data between source and target systems."
+            },
+            {
+              "element": "flows[1].schedule",
+              "intro": "This control provides options to schedule the data flow once every 15 minutes to once every week."
+            },
+            {
+              "element": "flows[1].run",
+              "intro": "This control lets you run the data flow on demand."
+            },
+            {
+              "element": "flows[1].enable-disable",
+              "intro": "This control lets you enable/disable the data flow."
+            },
+            {
+              "element": "settings",
+              "intro": "This section provides a set of most common customizations for each data flow as configurable settings."
+            }
+        ]
+    },
+    {
+        "steps": [
+            {
+                "element": "dashboard-link",
+                "intro": "This page provides powerful options to monitor and resolve data flow errors. You can view the status of the data flows and retry the flows that errored out."
+            },
+            {
+                "element": "help-icon",
+                "intro": "This page provides you access to detailed help guides on our Customer Compass."
+            }
+        ]
+    }
+]

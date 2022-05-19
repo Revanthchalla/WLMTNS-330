@@ -1,0 +1,47 @@
+{ "data" :
+  { "name": "walmart-auto-billing-invoice-import-adaptor"
+  , "externalId": "walmart_auto_billing_invoice_import_adaptor"
+  , "distributed": true
+  , "netsuite_da": {
+    "recordType": "invoice"
+    , "lookups": []
+    , "mapping":
+      {
+        "fields": [
+          {
+            "generate": "celigo_nlobjTransformId"
+          , "extract": "Sales Order Internal Id"
+          }
+        , {
+            "generate": "celigo_nlobjTransformType"
+          , "hardCodedValue": "salesorder"
+          }
+        ]
+      }
+    , "hooks":
+      { "preMap":
+        { "fileInternalId": null
+        , "function": null
+        }
+      , "postMap":
+        { "fileInternalId": null
+        , "function": "walmartInvoiceImportPostMapHook"
+        }
+      , "postSubmit":
+        { "fileInternalId": null
+        , "function": null
+        }
+      }
+    , "disabled": false
+    , "operation": "add"
+    }
+  }
+  , "resourcetype": "imports"
+  , "jsonpath":
+    [
+      { "record": "walmartintegration-load"
+      , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+      , "writeto": "_connectionId"
+      }
+    ]
+}

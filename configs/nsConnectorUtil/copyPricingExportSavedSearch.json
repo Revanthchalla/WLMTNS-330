@@ -1,0 +1,51 @@
+{
+  "data":
+    { "proxyData":
+        { "requestBody":
+            [
+              { "type": "savedsearch"
+              , "operation": "copy"
+              , "config":
+                  { "title" : "Celigo Walmart Pricing Export Search"
+                  , "copyFromSearchId" : "customsearch_celigo_wlmrt_pricing_exp_se"
+                  , "replaceFilters" : false
+                  , "filters" : [[
+                    "custitem_celigo_wlmrt_accounts.custrecord_celigo_wlmrt_account_id", "is" ]]
+                  }
+              }
+            ]
+        , "method": "POST"
+        , "connectionId": null
+        }
+    }
+  , "proxyCall": true
+  , "jsonpath":
+      [
+        {
+          "readfrom": [
+          {
+              "readfrom": "Celigo Walmart Pricing Export Search ["
+          },
+          {
+              "record": "state",
+              "readfrom": "accountname"
+          },
+          {
+              "readfrom": "]"
+          }],
+          "writetopath": "$.proxyData.requestBody[0].config",
+          "writeto": "title"
+        },
+        {
+            "record": "state",
+            "readfrom": "accountid",
+            "writeto": 0,
+            "writetopath": "$.proxyData.requestBody[0].config.filters"
+        },
+        { "record": "walmartintegration-load"
+        , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+        , "writetopath": "$.proxyData"
+        , "writeto": "connectionId"
+        }
+      ]
+}

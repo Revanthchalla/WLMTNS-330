@@ -1,0 +1,35 @@
+{ "connection-netsuite":
+    { "dependson": []
+    , "filelocation": "/configs/connections/netsuite.json"
+    }
+, "connection-walmart":
+    { "dependson": []
+    , "filelocation": "/configs/connections/walmart.json"
+    }
+, "integration":
+    { "name": "integration"
+    , "filelocation": "/configs/integrations/walmartintegration-schema.json"
+    , "dependson": ["versionInfo", "connection-netsuite", "connection-walmart", "import-walmart-nsUtil", "import-category", "import-category-variation"]
+    }
+, "import-walmart-nsUtil":
+    {
+      "name": "import-walmart-nsUtil",
+      "dependson": ["state", "connection-netsuite"],
+      "filelocation": "/configs/imports/nsUtil.json"
+    }
+, "versionInfo":
+    { "name": "versionInfo"
+    , "filelocation": "/package.json"
+    , "resolved": true
+    }
+,  "import-category":
+    { "dependson": ["state", "connection-netsuite"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/imports/category.json"
+    }
+, "import-category-variation":
+    { "dependson": ["state", "connection-netsuite"]
+    , "edition": ["standard"]
+    , "filelocation": "/configs/imports/category-variation.json"
+    }
+}

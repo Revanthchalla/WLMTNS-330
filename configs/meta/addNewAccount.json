@@ -1,0 +1,18 @@
+{
+    "walmartintegration-load":
+    {
+        "dependson": ["state"],
+        "filelocation": "/configs/integrations/walmartintegration-load.json"
+    },
+    "connection-walmart":
+    {
+        "dependson": ["state"],
+        "filelocation": "/configs/connections/walmart.json"
+    },
+    "integration-save-accountrecords":
+    {
+        "name": "integration",
+        "filelocation": "/configs/integrations/walmartintegration-save-newaccountrecords.json",
+        "dependson": ["connection-walmart", "walmartintegration-load"]
+    }
+}

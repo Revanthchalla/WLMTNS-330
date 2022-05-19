@@ -1,0 +1,15 @@
+{ "data": {}
+, "resourcetype": "integrations"
+, "jsonpath":
+  [
+    { "record": "walmartintegration-load"
+    , "readfrom": "$"
+    , "writeto": "$"
+    }
+  , { "record": "state"
+    , "readfrom": "stepcompleted"
+    , "writeto": "completed"
+    , "writetopath": "$.install[?(@.installerFunction==\"verifyProductConnection\")]"
+    }
+  ]
+}

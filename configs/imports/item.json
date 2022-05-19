@@ -1,0 +1,50 @@
+{
+    "data": {
+        "name": "walmart-item-import-adaptor",
+        "externalId": "walmart_item_import_adaptor",
+        "sampleData": {},
+        "mapping": {
+            "fields": []
+        },
+        "http": {
+            "relativeURI": [
+                "/feeds?feedType=item"
+            ],
+            "method": [
+                "POST"
+            ],
+            "body": [],
+            "ignoreEmptyNodes": true,
+            "response": {
+                "resourceIdPath": [ "//feedId" ]
+            },
+            "headers": [{
+                "name": "content-type",
+                "value": "multiPart/form-data"
+            },
+            {
+                "name": "Accept",
+                "value": "application/xml"
+            }]
+        },
+        "hooks": {
+            "preMap": {
+                "function": "walmartItemExportPreMapHook",
+                "_stackId": null
+            }
+        }
+    },
+    "resourcetype": "imports",
+    "jsonpath": [
+        { "record": "connection-walmart-http"
+        , "readfrom": "_id"
+        , "writeto": "_connectionId"
+        },
+        {
+            "record": "xml-feed-asynchelper",
+            "readfrom": "_id",
+            "writetopath": "$.http",
+            "writeto": "_asyncHelperId"
+        }
+    ]
+}

@@ -1,0 +1,102 @@
+{
+    "data":
+    {},
+    "resourcetype": "integrations",
+    "jsonpath": [
+    {
+        "record": "walmartintegration-load",
+        "readfrom": "$",
+        "writeto": "$"
+    },
+    {
+        "readfrom":
+        {
+            "accountname": "Account : CompleteInstall",
+            "imports": [
+            {}],
+            "exports": [
+            {}],
+            "flows": [
+            {}],
+            "savedSearches": [
+            {}],
+            "asyncHelpers" : [{}],
+            "categoryExportMap": {"null": "null"},
+            "walmartConnectionId": "",
+            "walmartHttpConnectionId": "",
+            "shopInstallComplete": false,
+            "accountid": ""
+        },
+        "writeto": "storemap",
+        "writetopath": "$.settings"
+    },
+    {
+        "readfrom":
+        {
+            "shopInstallComplete": false,
+            "title": "Walmart Account | Install Incomplete",
+            "id": "defaultaccountid",
+            "sections": [
+            {
+                "temp": "remove_me"
+            }]
+        },
+        "writeto": "sections",
+        "writetopath": "$.settings"
+    },
+    {
+        "record": "connection-walmart",
+        "readfrom": "_id",
+        "writeto": "walmartConnectionId",
+        "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+    },
+    {
+        "readfrom":
+        {
+            "name": "Add New Account",
+            "description": "Add a new Walmart account to your integration",
+            "imageURL": "/images/company-logos/walmart.png",
+            "completed": true,
+            "installerFunction": "addNewStore",
+            "uninstallerFunction": "deleteNewStore"
+        },
+        "writeto": "install",
+        "removeAll": true
+    },
+    {
+        "record": "walmartintegration-load",
+        "readfrom": "$.install[?(@.installerFunction==\"verifyNetSuiteConnection\")]",
+        "writeto": "install"
+    },
+    {
+        "readfrom":
+        {
+            "name": "Walmart Connection",
+            "description": "Configure New Walmart Marketplace credentials",
+            "imageURL": "/images/company-logos/walmart.png",
+            "completed": false,
+            "installerFunction": "verifyProductConnection",
+            "uninstallerFunction": "deleteProductConnection"
+        },
+        "writeto": "install"
+    },
+    {
+        "readfrom":
+        {
+            "name": "Install Walmart Bundle",
+            "description": "Install Walmart Bundle for new Account in NetSuite",
+            "imageURL": "/images/company-logos/netsuite.png",
+            "installURL": "",
+            "completed": false,
+            "installerFunction": "verifyProductBundleInstallation",
+            "uninstallerFunction": "uninstallVerifyProductBundle"
+        },
+        "writeto": "install"
+    },
+    {
+      "record": "connection-walmart"
+    , "readfrom": "_id"
+    , "writeto": "_connectionId"
+    , "writetopath": "$.install[?(@.installerFunction==\"verifyProductConnection\")]"
+    }]
+}

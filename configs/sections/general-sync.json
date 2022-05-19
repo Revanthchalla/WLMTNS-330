@@ -1,0 +1,47 @@
+{
+    "data":{
+        "title": "General"
+    ,   "fields":[
+        {
+            "label": "Walmart Account Name",
+            "tooltip": "This field represents the name of the Walmart account connected via this integration. The connector assigns a default value at first (example WMT-US-1) and it's recommended you update it to reflect the appropriate account name (max 20 chars). Modifying the account name also updates the corresponding labels on the NetSuite saved searches.",
+            "type": "input"
+        ,   "name": "walmart_account_name"
+        }
+    ]
+    }
+,    "jsonpath": [
+    {
+        "record":"state",
+        "readfrom":"accountid",
+        "writeto":"id"
+    },
+    {
+        "readfrom":[
+            {
+                "record":"state",
+                "readfrom": "accountname"
+            }
+        ],
+        "writeto": "value",
+        "writetopath":"$.fields[?(@.name==\"walmart_account_name\")]"
+    },
+    {
+        "readfrom": [
+          {
+            "readfrom": "general_"
+          },
+          {
+            "record": "state",
+            "readfrom": "accountid"
+          },
+          {
+            "readfrom": "_setAccountName"
+          }
+        ],
+        "writeto": "name",
+        "writetopath": "$.fields[?(@.name==\"walmart_account_name\")]"
+      }
+
+]
+}

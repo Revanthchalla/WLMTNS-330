@@ -1,0 +1,34 @@
+{ "data":
+  { "name": "walmart-kit-inventory-export-adaptor"
+  , "externalId": "walmart_kit_inventory_export_adaptor"
+  , "asynchronous": true
+  , "netsuite":
+    { "type": "restlet"
+    , "skipGrouping": false
+    , "statsOnly": false
+    , "restlet":
+      { "recordType": "kititem"
+      , "hooks":
+        { "batchSize": 20
+        , "preSend":
+          { "fileInternalId": null
+          , "function": "walmartKitInventoryExportPreSendHook"
+          }
+        }
+      }
+    }
+  }
+  , "resourcetype": "exports"
+  , "jsonpath":
+  [
+    { "record": "walmartintegration-load"
+    , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+    , "writeto": "_connectionId"
+    }
+  , { "record": "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch"
+    , "readfrom": "$[0].searchId"
+    , "writeto": "searchId"
+    , "writetopath": "$.netsuite.restlet"
+    }
+  ]
+}

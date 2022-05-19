@@ -1,0 +1,104 @@
+{ "data":
+  { "title": "Pricing"
+  , "columns": 1
+  , "flows":
+    [
+      { "_id": "walmart_pricing_flow"
+      , "showMapping": true
+      , "showSchedule": true
+      }
+    ]
+  , "fields":
+    [
+     { "label": "Select the NetSuite saved search for syncing item pricing details"
+      , "required": true
+      , "value": "customsearch_celigo_wlmrt_pricing_exp_se"
+      , "type": "select"
+      , "name": "pricing_export_savedSearch_searchId"
+      , "supportsRefresh": true
+      , "options":
+        [
+          [
+            "customsearch_celigo_wlmrt_pricing_exp_se"
+          , "Celigo Walmart Pricing Export Search"
+          ]
+        ]
+      }
+    ,  { "label": "NetSuite price level for syncing product price"
+       , "required": false
+       , "tooltip": "Lets you choose the NetSuite price level to be used for exporting the price to Walmart."
+       , "value": null
+       , "type": "select"
+       , "name": "pricing_export_savedSearch_pricelevel_filters"
+       , "supportsRefresh": true
+       , "options": []
+       }
+    ]
+  }
+  , "jsonpath":
+    [
+      { "record": "flow-pricing"
+      , "readfrom": "_id"
+      , "writeto": "_id"
+      , "writetopath": "$.flows[?(@._id==\"walmart_pricing_flow\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-pricingExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": 0
+      , "removeAll": true
+      , "writetopath": "$.fields[?(@.name==\"pricing_export_savedSearch_searchId\")].options"
+      }
+    , { "record": "nsConnectorUtil-copy-pricingExport-savedsearch"
+      , "readfrom": "$[0].searchInternalId"
+      , "writeto": "value"
+      , "writetopath": "$.fields[?(@.name==\"pricing_export_savedSearch_searchId\")]"
+      }
+    , { "record": "nsConnectorUtil-copy-pricingExport-savedsearch"
+      , "readfrom":
+          [
+            {
+              "readfrom": "Celigo Walmart Pricing Export Search ["
+            },
+            {
+              "record": "state",
+              "readfrom": "accountname"
+            },
+            {
+              "readfrom": "]"
+            }
+          ]
+      , "writeto": 0
+      , "writetopath": "$.fields[?(@.name==\"pricing_export_savedSearch_searchId\")].options"
+      }
+    , { "readfrom":
+        [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-pricing"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_savedSearch_listSavedSearches"
+          }
+        ]
+      , "writeto": "name"
+      , "writetopath": "$.fields[?(@.name==\"pricing_export_savedSearch_searchId\")]"
+      }
+    , { "readfrom":
+        [
+          {
+            "readfrom": "exports_"
+          }
+        , { "record": "export-pricing"
+          , "readfrom": "_id"
+          }
+        , {
+            "readfrom": "_updateSearchPricingFilters_listPriceLevels"
+          }
+        ]
+      , "writeto": "name"
+      , "writetopath": "$.fields[?(@.name==\"pricing_export_savedSearch_pricelevel_filters\")]"
+      }
+  ]
+}

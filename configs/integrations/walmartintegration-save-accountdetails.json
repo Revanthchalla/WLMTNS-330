@@ -1,0 +1,57 @@
+{
+    "data":
+    {},
+    "resourcetype": "integrations",
+    "jsonpath": [
+    {
+        "record": "walmartintegration-load-to-saveaccountdetails",
+        "readfrom": "$",
+        "writeto": "$"
+    },
+    {
+        "readfrom":
+        {
+            "name": "Add New Account",
+            "description": "Configure new Walmart account credentials",
+            "imageURL": "/images/company-logos/walmart.png",
+            "completed": true,
+            "installerFunction": "addNewStore",
+            "uninstallerFunction": "deleteNewStore"
+        },
+        "writeto": "install",
+        "removeAll": true
+    },
+    {
+        "record": "walmartintegration-load-to-saveaccountdetails",
+        "readfrom": "$.install[?(@.installerFunction==\"verifyNetSuiteConnection\")]",
+        "writeto": "install"
+    },
+    {
+        "readfrom":
+        {
+            "name": "Walmart Bundle",
+            "description": "Install Walmart Bundle in NetSuite",
+            "imageURL": "/images/company-logos/netsuite.png",
+            "installURL": "",
+            "completed": true,
+            "installerFunction": "verifyProductBundleInstallation",
+            "uninstallerFunction": "uninstallVerifyProductBundle"
+        },
+        "writeto": "install"
+    },
+    {
+        "record": "state",
+        "readfrom": "mode",
+        "writeto": "mode"
+    },
+    {
+        "readfrom": "true",
+        "writeto": "shopInstallComplete",
+        "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+    },
+    {
+        "readfrom": "true",
+        "writeto": "shopInstallComplete",
+        "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+    }]
+}

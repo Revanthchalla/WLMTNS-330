@@ -1,0 +1,22 @@
+{ "data" :
+  {   "name": "Walmart Get FeedSubmissionStatus Export Adaptor",
+      "externalId": "walmart_get_feedSubmissionStatus_export_adaptor",  
+      "asynchronous": true,
+      "pageSize": 20,
+      "http": {
+      	"relativeURI": "/feeds/{{data.feedId}}",
+      	"response": {
+          "resourcePath": "/PartnerFeedResponse"
+        },
+        "method": "GET"
+      }
+  }
+, "resourcetype": "exports"
+, "jsonpath":
+  [
+    { "record": "connection-walmart-http"
+    , "readfrom": "_id"
+    , "writeto": "_connectionId"
+    }
+  ]
+}

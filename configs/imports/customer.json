@@ -1,0 +1,112 @@
+{ "data" :
+  { "name": "walmart-customer-import-adaptor"
+  , "externalId": "walmart_customer_import_adaptor"
+  , "distributed": true
+  , "netsuite_da": {
+      "recordType": "customer"
+      , "lookups": []
+      , "mapping":
+      { "fields": [
+          {
+            "generate": "firstname",
+            "extract": "firstname"
+          },
+          {
+            "generate": "lastname",
+            "extract": "lastname"
+          },
+          {
+            "generate": "email",
+            "extract": "email"
+          },
+          {
+            "generate": "custentity_celigo_etail_channel",
+            "hardCodedValue": "Walmart"
+          },
+          {
+            "generate": "phone",
+            "extract": "phone"
+          },
+          {
+            "generate": "isperson",
+            "hardCodedValue": "true"
+          }
+        ],
+        "lists": [
+          {
+            "generate": "addressbook",
+            "fields": [
+              {
+                "generate": "defaultshipping",
+                "hardCodedValue": true
+              },
+              {
+                "generate": "defaultbilling",
+                "hardCodedValue": true
+              },
+              {
+                "generate": "addressee",
+                "extract": "shippingAddressArray[*].name"
+              },
+              {
+                "generate": "addr1",
+                "extract": "shippingAddressArray[*].address1"
+              },
+              {
+                "generate": "addr2",
+                "extract": "shippingAddressArray[*].address2"
+              },
+              {
+                "generate": "city",
+                "extract": "shippingAddressArray[*].city"
+              },
+              {
+                "generate": "state",
+                "extract": "shippingAddressArray[*].state"
+              },
+              {
+                "generate": "zip",
+                "extract": "shippingAddressArray[*].postalCode"
+              },
+              {
+                "generate": "addrphone",
+                "extract": "shippingAddressArray[*].phone"
+              },
+              {
+                "generate": "country",
+                "extract": "shippingAddressArray[*].country"
+              }
+            ]
+          }
+        ]
+      }
+    , "hooks": {
+        "preMap": {
+          "fileInternalId": null,
+          "function": null
+        },
+        "postMap": {
+          "fileInternalId": null,
+          "function": "walmartCustomerImportPostMapHook"
+        },
+        "postSubmit": {
+          "fileInternalId": null,
+          "function": "walmartCustomerImportPostSubmitHook"
+        }
+      }
+    , "disabled": false
+    , "operation": "addupdate"
+    , "internalIdLookup": {
+        "expression": "[\"email\",\"is\",\"{{email}}\"]"
+       }
+    }
+  }
+  , "resourcetype": "imports"
+  , "jsonpath":
+    [
+      { "record": "walmartintegration-load"
+      , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+      , "writeto": "_connectionId"
+      }
+    ]
+}

@@ -1,0 +1,387 @@
+{ "data": {}
+, "resourcetype": "integrations"
+, "jsonpath": [
+  { "record": "walmartintegration-load"
+  , "readfrom": "$"
+  , "writeto": "$"
+  }
+, { "record": "connection-walmart-http"
+  , "readfrom": "_id"
+  , "writeto": "walmartHttpConnectionId"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+,  {
+    "record": "general-sync",
+    "readfrom": "$",
+    "writeto": "general",
+    "writetopath": "$.settings"
+  }
+
+, { "record": "order-sync"
+  , "readfrom": "$"
+  , "removeAll": true
+  , "writeto": "sections"
+  , "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "fulfillment-sync"
+  , "readfrom": "$"
+  , "writeto": "sections"
+  , "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "inventory-sync"
+  , "readfrom": "$"
+  , "writeto": "sections"
+  , "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "pricing-sync"
+  , "readfrom": "$"
+  , "writeto": "sections"
+  , "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "auto-billing-sync"
+  , "readfrom": "$"
+  , "writeto": "sections"
+  , "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "item-sync"
+  , "readfrom": "$"
+  , "writeto": "sections"
+  , "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "state"
+  , "readfrom": "stepcompleted"
+  , "writeto": "completed"
+  , "writetopath": "$.install[?(@.installerFunction==\"verifyProductBundleInstallation\")]"
+  }
+, { "record": "export-order-acknowledgment"
+  , "readfrom": "_id"
+  , "writeto": "orderAckFlowExportId"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-customer"
+  , "readfrom": "apiIdentifier"
+  , "writeto" : "apiIdentifierCustomerImport"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-order-acknowledgment"
+  , "readfrom": "_id"
+  , "writeto": "orderAckFlowId"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-order"
+  , "readfrom": "_id"
+  , "writeto" : "orderImportAdaptorId"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-order-on-demand"
+  , "readfrom": "_id"
+  , "writeto": "onDemandOrderImportFlowId"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-auto-billing-cashsale"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-auto-billing-invoice"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-customer"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-fulfillment"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-inventory"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-kit-inventory"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-order-acknowledgment"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-order-on-demand"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-order"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "export-pricing"
+  , "readfrom": "_id"
+  , "writeto" : "exports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-auto-billing-cashsale"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-auto-billing-invoice"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-customer"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-fulfillment"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-inventory"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-kit-inventory"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-order-acknowledgment"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-order-on-demand"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-order"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "flow-pricing"
+  , "readfrom": "_id"
+  , "writeto" : "flows"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-auto-billing-cashsale"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-auto-billing-invoice"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-customer"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-fulfillment"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-inventory"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-kit-inventory"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-walmart-nsUtil"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-order-acknowledgment"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-order"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "import-pricing"
+  , "readfrom": "_id"
+  , "writeto" : "imports"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "export-item",
+    "readfrom": "_id",
+    "writeto": "nsItemExportAdaptorId",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "import-item",
+    "readfrom": "_id",
+    "writeto": "imports",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "import-item",
+    "readfrom": "_id",
+    "writeto": "itemImportAdaptorId",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+  "record": "flow-item",
+  "readfrom": "_id",
+  "writeto": "flows",
+  "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "export-item",
+    "readfrom": "_id",
+    "writeto": "exports",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "export-get-feedsubmissionstatus",
+    "readfrom": "_id",
+    "writeto": "exports",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "export-get-feedsubmissionresult",
+    "readfrom": "_id",
+    "writeto": "exports",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "import-category-mapping-storage",
+    "readfrom": "_id",
+    "writeto": "imports",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "import-category-mapping-storage",
+    "readfrom": "_id",
+    "writeto": "itemCategoryMappingsStorageImportAdaptor",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "import-item-status",
+    "readfrom": "_id",
+    "writeto": "imports",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+     "record": "import-item-status",
+     "readfrom": "apiIdentifier",
+     "writeto": "apiIdentifierItemStatusImportAdaptor",
+     "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "export-single-item",
+    "readfrom": "_id",
+    "writeto": "exports",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "record": "export-single-item",
+    "readfrom": "apiIdentifier",
+    "writeto": "apiIdentifierSingleItemExportAdaptor",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "readfrom": "null",
+    "writeto": "null",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})].categoryExportMap"
+  }
+, {
+    "record": "nsConnectorUtil-copy-itemExport-savedsearch",
+    "readfrom": "$[0].searchInternalId",
+    "writeto": "savedSearches",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "nsConnectorUtil-copy-autoBillingExport-savedsearch"
+  , "readfrom": "$[0].searchInternalId"
+  , "writeto" : "savedSearches"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "nsConnectorUtil-copy-fulfillmentExport-savedsearch"
+  , "readfrom": "$[0].searchInternalId"
+  , "writeto" : "savedSearches"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "nsConnectorUtil-copy-inventoryExport-savedsearch"
+  , "readfrom": "$[0].searchInternalId"
+  , "writeto" : "savedSearches"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "nsConnectorUtil-copy-kitItems-inventoryExport-savedsearch"
+  , "readfrom": "$[0].searchInternalId"
+  , "writeto" : "savedSearches"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "nsConnectorUtil-copy-pricingExport-savedsearch"
+  , "readfrom": "$[0].searchInternalId"
+  , "writeto" : "savedSearches"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "state"
+  , "readfrom": "accountid"
+  , "writeto" : "accountid"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "state"
+  , "readfrom": "accountname"
+  , "writeto" : "accountname"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "state"
+  , "readfrom": "externalIdPrefix"
+  , "writeto" : "externalIdPrefix"
+  , "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "state"
+  , "readfrom": "accountname"
+  , "writeto" : "title"
+  , "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "state"
+  , "readfrom": "accountid"
+  , "writeto" : "id"
+  , "writetopath": "$.settings.sections[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_SECTION_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, { "record": "state"
+  , "readfrom": "connectorEdition"
+  , "writeto" : "connectorEdition"
+  , "writetopath": "$.settings"
+  }
+, {
+    "record": "xml-feed-asynchelper",
+    "readfrom": "_id",
+    "writeto": "asyncHelpers",
+    "writetopath": "$.settings.storemap[?(@.{{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_STORE_MAP_ATTR'}}}=={{{pathHelper 'state.connectorConstants.STORE_IDENTIFY_VALUE'}}})]"
+  }
+, {
+    "readfrom": true,
+    "writeto": "editionMigrated",
+    "writetopath": "$.settings"
+  }
+ ]
+}

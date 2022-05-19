@@ -1,0 +1,37 @@
+{
+  "data": {
+    "name": "walmart-pricing-export-adaptor"
+    , "externalId": "walmart_pricing_export_adaptor"
+    , "asynchronous": true
+    , "type": "delta"
+    , "delta": {
+        "dateField": "lastmodifieddate"
+      }
+    , "netsuite":
+        { "type": "restlet"
+        , "skipGrouping": false
+        , "restlet":
+            { "recordType": "item"
+            , "hooks":
+                { "preSend":
+                    { "fileInternalId": null
+                    , "function": null
+                    }
+                }
+            }
+        }
+    }
+  , "resourcetype": "exports"
+  , "jsonpath":
+    [
+      { "record": "walmartintegration-load"
+      , "readfrom": "$.settings.commonresources.netsuiteConnectionId"
+      , "writeto": "_connectionId"
+      }
+    , { "record": "nsConnectorUtil-copy-pricingExport-savedsearch"
+      , "readfrom": "$[0].searchId"
+      , "writeto": "searchId"
+      , "writetopath": "$.netsuite.restlet"
+      }
+    ]
+}
